@@ -1,0 +1,29 @@
+{
+  "skill_name": "connect-openrouter",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Set up OpenRouter so I can use SERP clustering.",
+      "expected_output": "Should guide user through getting an API key from openrouter.ai/keys, saving it via save_openrouter_key.py, and verifying the connection.",
+      "assertions": [
+        "Runs banner as first action",
+        "Checks if OpenRouter is already connected",
+        "Directs user to openrouter.ai/keys",
+        "Saves key to .claude/settings.local.json",
+        "Verifies connection with test call"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "How do I connect OpenRouter?",
+      "expected_output": "Should activate connect-openrouter skill and walk through step-by-step setup.",
+      "assertions": [
+        "Triggers on OpenRouter setup language",
+        "Follows step-by-step flow",
+        "Mentions which skills need OpenRouter"
+      ],
+      "files": []
+    }
+  ]
+}

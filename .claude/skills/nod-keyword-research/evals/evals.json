@@ -1,0 +1,29 @@
+{
+  "skill_name": "nod-keyword-research",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Do keyword research for 'email marketing'. I want related queries, questions, and long-tail variations.",
+      "expected_output": "Should call Query Fan-out API, expand into related queries, questions, and long-tail variations, organized into clusters.",
+      "assertions": [
+        "Calls Query Fan-out API with seed keyword",
+        "Returns related queries",
+        "Returns question-form keywords",
+        "Returns long-tail variations",
+        "Organizes results into clusters"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Build a topical map around 'content marketing' for the Polish market.",
+      "expected_output": "Should use Query Fan-out with Polish settings, generate keyword clusters organized by topic.",
+      "assertions": [
+        "Uses Polish geo/language settings",
+        "Generates topical clusters",
+        "Returns Polish-language keyword variations"
+      ],
+      "files": []
+    }
+  ]
+}

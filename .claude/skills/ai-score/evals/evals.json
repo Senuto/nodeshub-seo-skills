@@ -1,0 +1,39 @@
+{
+  "skill_name": "ai-score",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Check if this article is AI-generated: [paste 300-word article]",
+      "expected_output": "Should analyze the text via Genuino API and return classification (AI/HUMAN), probability score, and writing style.",
+      "assertions": [
+        "Runs analyze.py with the provided text",
+        "Shows AI probability percentage",
+        "Shows classification (AI or HUMAN)",
+        "Shows writing style with confidence"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "What's the AI score for https://example.com/blog-post?",
+      "expected_output": "Should fetch the URL content via Jina Reader and analyze it with Genuino.",
+      "assertions": [
+        "Fetches URL content via Jina Reader",
+        "Passes text to Genuino API",
+        "Returns AI probability and classification"
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Check my article for AI content and tell me what to fix.",
+      "expected_output": "Should analyze with --guidelines flag and show specific sections to humanize.",
+      "assertions": [
+        "Uses --guidelines flag",
+        "Shows per-section humanization guidelines",
+        "Provides actionable rewrite instructions"
+      ],
+      "files": []
+    }
+  ]
+}

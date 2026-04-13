@@ -1,0 +1,28 @@
+{
+  "skill_name": "nod-nodeshub-api",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Check my NodesHub API balance.",
+      "expected_output": "Should run balance.py script and display remaining tokens.",
+      "assertions": [
+        "Runs balance.py script",
+        "Displays remaining token count",
+        "Shows account status"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Is my NodesHub API working? Test the connection.",
+      "expected_output": "Should run check_setup.py to verify API key and connectivity.",
+      "assertions": [
+        "Runs check_setup.py",
+        "Verifies API key is set",
+        "Tests API connectivity",
+        "Reports success or failure with guidance"
+      ],
+      "files": []
+    }
+  ]
+}

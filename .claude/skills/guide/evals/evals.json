@@ -1,0 +1,39 @@
+{
+  "skill_name": "guide",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "What can you do? Show me what's available.",
+      "expected_output": "Should present an overview of skills, agents, and connect utilities with clear categories.",
+      "assertions": [
+        "Runs banner as first action",
+        "Lists skills grouped by category",
+        "Explains agents and how to trigger them",
+        "Mentions API connection requirements"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "I just installed this. How do I get started?",
+      "expected_output": "Should guide through onboarding: explain what the toolkit does, check API connections, suggest first steps.",
+      "assertions": [
+        "Explains the three layers (skills, agents, connect)",
+        "Directs to /connect-nodeshub as first step",
+        "Offers to check existing API connections"
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "I want to write an article about SEO tools.",
+      "expected_output": "Should route to the keyword-to-publish agent or nod-content-brief skill based on user needs.",
+      "assertions": [
+        "Identifies the goal as content creation",
+        "Suggests keyword-to-publish agent for full pipeline",
+        "Mentions nod-content-brief as lighter alternative"
+      ],
+      "files": []
+    }
+  ]
+}

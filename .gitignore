@@ -1,0 +1,33 @@
+# Local files (not shared)
+local/
+*.local.md
+CLAUDE.local.md
+settings.local.json
+.claude/settings.local.json
+
+# OS files
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+
+# Dependencies
+node_modules/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Generated / user data
+data/gsc/*.json
+knowledge/metrics/**/*.json
+reports/**/*.html
+reports/**/*.json
+
+# Secrets / env
+.env
+.env.*
+
+# npm pack artifacts
+*.tgz

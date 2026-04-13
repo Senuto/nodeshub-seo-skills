@@ -1,0 +1,30 @@
+{
+  "skill_name": "nod-competitor-tracker",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Track who ranks for my keywords: 'crm software', 'best crm for startups', 'crm comparison'. My domain is acmecrm.com.",
+      "expected_output": "Should call SERPdata API for each keyword, extract all ranking domains, identify recurring competitors, show a table of competitor positions per keyword, and save a tracking snapshot.",
+      "assertions": [
+        "Calls SERPdata API for all 3 keywords",
+        "Extracts competitor domains from organic results",
+        "Produces a comparison table showing competitor positions",
+        "Saves snapshot to data/competitor-tracking/",
+        "Highlights where acmecrm.com ranks vs competitors"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Who are my top SEO competitors for 'project management tool'?",
+      "expected_output": "Should trigger competitor tracking, fetch SERP for the keyword, identify domains ranking in top 10, and present competitor analysis.",
+      "assertions": [
+        "Triggers on competitor-related phrasing",
+        "Fetches SERP data for the keyword",
+        "Lists competing domains with their positions",
+        "Provides actionable competitor insights"
+      ],
+      "files": []
+    }
+  ]
+}

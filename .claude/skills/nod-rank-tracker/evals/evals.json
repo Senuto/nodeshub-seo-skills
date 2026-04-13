@@ -1,0 +1,29 @@
+{
+  "skill_name": "nod-rank-tracker",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Track rankings for senuto.com on keywords: 'keyword research tool', 'seo platform', 'competitor analysis tool'.",
+      "expected_output": "Should fetch SERP for each keyword, find domain position, save a daily snapshot, and show comparison if previous data exists.",
+      "assertions": [
+        "Fetches SERP data for all keywords",
+        "Finds senuto.com position in each SERP",
+        "Saves snapshot to data/rank-history/",
+        "Shows position changes if previous snapshot exists",
+        "Displays results in a table format"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Where do I rank for 'seo tools'? My domain is example.com.",
+      "expected_output": "Should trigger rank tracking, check SERP position, and report findings.",
+      "assertions": [
+        "Triggers on ranking position language",
+        "Checks domain position in SERP",
+        "Reports current position or not-found status"
+      ],
+      "files": []
+    }
+  ]
+}

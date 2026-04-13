@@ -1,0 +1,27 @@
+{
+  "skill_name": "connect-ga4",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Help me connect Google Analytics 4.",
+      "expected_output": "Should guide through GA4 setup, credentials, and property ID configuration.",
+      "assertions": [
+        "Provides step-by-step GA4 setup",
+        "Explains credential creation",
+        "Guides property ID configuration",
+        "Tests connection with fetch-ga4.js"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Set up GA4 analytics.",
+      "expected_output": "Should trigger GA4 connection guide.",
+      "assertions": [
+        "Triggers on GA4 setup language",
+        "Provides clear setup steps"
+      ],
+      "files": []
+    }
+  ]
+}

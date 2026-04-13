@@ -1,0 +1,25 @@
+# Local / private files
+local/
+*.local.md
+settings.local.json
+CLAUDE.local.md
+.claude/settings.local.json
+
+# Runtime data
+data/
+knowledge/
+
+# Dev / repo files
+.git/
+.github/
+node_modules/
+**/__pycache__
+**/*.pyc
+
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/
+
+# Misc
+CHANGELOG.md

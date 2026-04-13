@@ -1,0 +1,43 @@
+{
+  "company": {
+    "name": "Your Company",
+    "url": "https://example.com",
+    "tagline": ""
+  },
+  "logo": {
+    "light": "assets/branding/logo-light.svg",
+    "dark": "assets/branding/logo-dark.svg",
+    "fallback_text": true
+  },
+  "colors": {
+    "primary": "#3B82F6",
+    "primary_light": "#60A5FA",
+    "secondary": "#10B981",
+    "background": "#FFFFFF",
+    "background_dark": "#0F172A",
+    "background_card": "#F8FAFC",
+    "text_primary": "#1E293B",
+    "text_secondary": "#64748B",
+    "text_muted": "#94A3B8",
+    "border": "#E2E8F0",
+    "success": "#22C55E",
+    "warning": "#F59E0B",
+    "error": "#EF4444"
+  },
+  "gradients": {
+    "primary": "linear-gradient(135deg, #3B82F6 0%, #60A5FA 100%)",
+    "header": "linear-gradient(90deg, #0F172A 0%, #1E293B 100%)"
+  },
+  "typography": {
+    "font_family": "Inter, system-ui, -apple-system, sans-serif",
+    "font_family_mono": "JetBrains Mono, monospace",
+    "heading_weight": "700",
+    "body_weight": "400"
+  },
+  "report": {
+    "show_logo": true,
+    "show_footer": true,
+    "footer_text": "Generated with Nodeshub SEO Skills",
+    "date_format": "YYYY-MM-DD"
+  }
+}

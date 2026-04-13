@@ -1,0 +1,30 @@
+{
+  "skill_name": "nod-serp-clusters",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Cluster these keywords by SERP similarity: 'crm software', 'best crm', 'crm tools', 'customer relationship management', 'crm for startups', 'how to choose a crm'.",
+      "expected_output": "Should fetch SERPs for all keywords, compare overlapping URLs, group keywords sharing similar results into clusters, and generate cluster names via LLM.",
+      "assertions": [
+        "Fetches SERP data for all keywords",
+        "Compares URL overlap between keyword SERPs",
+        "Groups keywords into clusters based on shared URLs",
+        "Generates descriptive cluster names",
+        "Outputs results in CSV or structured format"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Which of these keywords go together: 'email marketing', 'email automation', 'email campaigns', 'newsletter software'?",
+      "expected_output": "Should trigger SERP clustering to determine which keywords share similar Google results.",
+      "assertions": [
+        "Triggers on keyword grouping language",
+        "Analyzes SERP overlap",
+        "Groups related keywords",
+        "Explains clustering rationale"
+      ],
+      "files": []
+    }
+  ]
+}

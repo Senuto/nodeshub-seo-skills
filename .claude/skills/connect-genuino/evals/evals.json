@@ -1,0 +1,29 @@
+{
+  "skill_name": "connect-genuino",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Set up Genuino so I can check AI content scores.",
+      "expected_output": "Should guide user through getting an API key from genuino.ai, saving it, and verifying the connection.",
+      "assertions": [
+        "Runs banner as first action",
+        "Checks if Genuino is already connected",
+        "Directs user to genuino.ai",
+        "Saves key to .claude/settings.local.json",
+        "Verifies connection via /v1/health/basic"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "How do I connect Genuino?",
+      "expected_output": "Should activate connect-genuino skill and walk through step-by-step setup.",
+      "assertions": [
+        "Triggers on Genuino setup language",
+        "Follows step-by-step flow",
+        "Mentions ai-score skill as the consumer"
+      ],
+      "files": []
+    }
+  ]
+}

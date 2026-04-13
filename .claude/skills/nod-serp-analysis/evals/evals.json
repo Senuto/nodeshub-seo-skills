@@ -1,0 +1,30 @@
+{
+  "skill_name": "nod-serp-analysis",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Analyze the SERP for 'best crm software' in the US market.",
+      "expected_output": "Should fetch SERP data, extract top 10 organic results, identify SERP features, analyze dominant intent, and present a comprehensive breakdown.",
+      "assertions": [
+        "Fetches SERP data with gl=us",
+        "Lists top 10 organic results with URLs and titles",
+        "Identifies SERP features (PAA, ads, snippets, etc.)",
+        "Determines dominant search intent",
+        "Highlights content patterns among top results"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Who ranks for 'project management tool' and what SERP features are there?",
+      "expected_output": "Should trigger SERP analysis, show ranking domains and all present SERP features.",
+      "assertions": [
+        "Triggers on SERP-related language",
+        "Shows ranking domains with positions",
+        "Lists all SERP features present",
+        "Provides competitive insights"
+      ],
+      "files": []
+    }
+  ]
+}

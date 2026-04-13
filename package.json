@@ -1,0 +1,54 @@
+{
+  "name": "nodeshub-seo-skills",
+  "version": "0.1.0",
+  "description": "SEO automation toolkit for Claude Code — powered by NodesHub API. Run npx nodeshub-seo-skills to install skills into any project.",
+  "license": "MIT",
+  "author": "Senuto",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Senuto/nodeshub-seo-skills"
+  },
+  "homepage": "https://github.com/Senuto/nodeshub-seo-skills#readme",
+  "bugs": {
+    "url": "https://github.com/Senuto/nodeshub-seo-skills/issues"
+  },
+  "keywords": [
+    "seo",
+    "claude-code",
+    "nodeshub",
+    "serp",
+    "keyword-research",
+    "content-brief",
+    "rank-tracker",
+    "ai-tools"
+  ],
+  "type": "module",
+  "bin": {
+    "nodeshub-seo-skills": "./bin/install.mjs"
+  },
+  "files": [
+    "bin/",
+    ".claude/skills/",
+    ".claude/agents/",
+    ".claude-plugin/",
+    "!**/__pycache__",
+    "!**/*.pyc",
+    "assets/",
+    "docs/",
+    "scripts/fetch-gsc.js",
+    "scripts/fetch-ga4.js",
+    "AGENTS.md",
+    "CLAUDE.md",
+    "CONTRIBUTING.md",
+    "LICENSE",
+    "README.md",
+    "TERMS-OF-USE.md"
+  ],
+  "scripts": {
+    "fetch-gsc": "node scripts/fetch-gsc.js",
+    "fetch-ga4": "node scripts/fetch-ga4.js"
+  },
+  "optionalDependencies": {
+    "googleapis": "^144.0.0"
+  }
+}

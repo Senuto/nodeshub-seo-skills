@@ -1,0 +1,27 @@
+{
+  "skill_name": "connect-gsc",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "How do I connect Google Search Console?",
+      "expected_output": "Should guide through GSC OAuth setup, service account or OAuth credentials, and saving them to the local directory.",
+      "assertions": [
+        "Provides step-by-step GSC setup",
+        "Explains OAuth credential creation",
+        "Guides credential file storage",
+        "Tests connection with fetch-gsc.js"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Set up GSC for my project.",
+      "expected_output": "Should trigger GSC connection guide.",
+      "assertions": [
+        "Triggers on GSC setup language",
+        "Provides clear setup steps"
+      ],
+      "files": []
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "skill_name": "nod-paa-miner",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Mine People Also Ask questions for: 'crm software', 'best crm', 'crm for small business'.",
+      "expected_output": "Should fetch SERPs for all keywords, extract PAA questions, deduplicate, and optionally cluster them by topic.",
+      "assertions": [
+        "Fetches SERP data for all keywords",
+        "Extracts PAA questions from each SERP",
+        "Deduplicates questions across keywords",
+        "Presents structured question bank",
+        "Optionally clusters by topic"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "What questions do people ask about 'email marketing'?",
+      "expected_output": "Should trigger PAA mining for the keyword and return a list of questions.",
+      "assertions": [
+        "Triggers on question-mining language",
+        "Extracts PAA questions",
+        "Returns structured question list"
+      ],
+      "files": []
+    }
+  ]
+}

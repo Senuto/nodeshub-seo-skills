@@ -1,0 +1,30 @@
+{
+  "skill_name": "nod-featured-snippet-hunter",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Find featured snippet opportunities for senuto.com. Keywords: 'keyword research', 'seo audit', 'competitor analysis'.",
+      "expected_output": "Should check SERPs for each keyword, identify which have featured snippets, classify as steal/defend/target, and produce a prioritized list.",
+      "assertions": [
+        "Fetches SERP data for all keywords",
+        "Detects featured snippet presence",
+        "Classifies each as steal/defend/target",
+        "Identifies current snippet owner",
+        "Shows domain's current position"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Can I win any position zero results for 'what is SEO'?",
+      "expected_output": "Should trigger featured snippet analysis, check snippet presence, identify current owner, assess competitiveness.",
+      "assertions": [
+        "Triggers on position zero language",
+        "Checks featured snippet presence",
+        "Identifies current snippet holder",
+        "Provides actionable recommendations"
+      ],
+      "files": []
+    }
+  ]
+}

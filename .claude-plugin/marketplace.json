@@ -1,0 +1,51 @@
+{
+  "name": "nodeshub-seo-skills",
+  "owner": {
+    "name": "Senuto",
+    "email": "hello@nodeshub.io"
+  },
+  "metadata": {
+    "description": "SEO automation skills for Claude Code — SERP analysis, keyword research, rank tracking, content briefs, and more. Powered by NodesHub API.",
+    "version": "0.1.0",
+    "repository": "https://github.com/Senuto/nodeshub-seo-skills"
+  },
+  "plugins": [
+    {
+      "name": "nodeshub-seo-skills",
+      "description": "19 SEO skills and 3 agents for technical marketers and SEO professionals: SERP analysis, keyword research, rank tracking, competitor monitoring, content briefs, content auditing, AI content detection, visibility scoring, featured snippet hunting, PAA mining, SERP clustering, full article pipelines, and more.",
+      "source": "./",
+      "strict": false,
+      "version": "0.1.0",
+      "author": {
+        "name": "Senuto",
+        "email": "hello@nodeshub.io"
+      },
+      "homepage": "https://nodeshub.io",
+      "repository": "https://github.com/Senuto/nodeshub-seo-skills",
+      "license": "MIT",
+      "keywords": ["seo", "serp", "keyword-research", "content-brief", "rank-tracker", "clustering", "ai-detection", "genuino", "nodeshub"],
+      "category": "marketing",
+      "skills": [
+        "./.claude/skills/nod-competitor-tracker",
+        "./.claude/skills/nod-content-auditor",
+        "./.claude/skills/nod-content-brief",
+        "./.claude/skills/nod-featured-snippet-hunter",
+        "./.claude/skills/nod-keyword-research",
+        "./.claude/skills/nod-nodeshub-api",
+        "./.claude/skills/nod-paa-miner",
+        "./.claude/skills/nod-rank-tracker",
+        "./.claude/skills/nod-serp-analysis",
+        "./.claude/skills/nod-serp-clusters",
+        "./.claude/skills/nod-visibility-monitor",
+        "./.claude/skills/ai-score",
+        "./.claude/skills/connect-nodeshub",
+        "./.claude/skills/connect-openrouter",
+        "./.claude/skills/connect-genuino",
+        "./.claude/skills/connect-gsc",
+        "./.claude/skills/connect-ga4",
+        "./.claude/skills/skill-creator",
+        "./.claude/skills/guide"
+      ]
+    }
+  ]
+}

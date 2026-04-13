@@ -1,0 +1,30 @@
+{
+  "skill_name": "nod-content-auditor",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Audit my page https://example.com/blog/crm-guide against the keyword 'best crm software'.",
+      "expected_output": "Should fetch SERP for the keyword, crawl competitor pages via Jina Reader, crawl user's page, compare content coverage, identify gaps, and produce an audit report with optimization recommendations.",
+      "assertions": [
+        "Fetches SERP data for the target keyword",
+        "Crawls the user's page via Jina Reader",
+        "Crawls top-ranking competitor pages",
+        "Identifies content gaps and missing keywords",
+        "Provides specific optimization recommendations"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "What am I missing on my email marketing guide? URL: https://example.com/email-marketing-guide, keyword: 'email marketing guide'.",
+      "expected_output": "Should trigger content audit, analyze SERP competitors, crawl user's page and competitor pages, identify missing subtopics.",
+      "assertions": [
+        "Triggers on content gap language",
+        "Analyzes competitor content structure",
+        "Identifies specific missing subtopics",
+        "Suggests concrete content additions"
+      ],
+      "files": []
+    }
+  ]
+}

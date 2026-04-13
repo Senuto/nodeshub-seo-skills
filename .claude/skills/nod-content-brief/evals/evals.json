@@ -1,0 +1,32 @@
+{
+  "skill_name": "nod-content-brief",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Create a content brief for the keyword 'how to choose a CRM'.",
+      "expected_output": "Should fetch SERP data and run query fan-out, analyze top 10 competitors, determine search intent, and produce a structured brief with title, headings, target keywords, word count, and outline.",
+      "assertions": [
+        "Calls SERPdata API for the primary keyword",
+        "Calls Query Fan-out for related queries",
+        "Analyzes top 10 SERP results",
+        "Produces brief with title suggestions",
+        "Includes heading structure",
+        "Lists target keywords and related terms",
+        "Reads product context from docs/ if available"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "I need a writing brief for 'email automation best practices' targeting the US market.",
+      "expected_output": "Should trigger content brief generation with US geo-targeting, combine SERP analysis with keyword expansion.",
+      "assertions": [
+        "Triggers on brief-related language",
+        "Uses gl=us for geo-targeting",
+        "Combines SERP data with query fan-out",
+        "Delivers actionable writing outline"
+      ],
+      "files": []
+    }
+  ]
+}

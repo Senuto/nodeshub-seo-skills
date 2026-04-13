@@ -1,0 +1,28 @@
+{
+  "skill_name": "connect-nodeshub",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Help me set up the NodesHub API.",
+      "expected_output": "Should guide user through getting an API key from nodeshub.io, saving it to settings.local.json, and verifying the connection.",
+      "assertions": [
+        "Provides step-by-step setup instructions",
+        "Points to nodeshub.io for API key",
+        "Saves key to .claude/settings.local.json",
+        "Runs check_setup.py to verify connection"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Connect NodesHub to my project.",
+      "expected_output": "Should trigger the setup guide and walk through API key configuration.",
+      "assertions": [
+        "Triggers on NodesHub setup language",
+        "Provides clear setup steps",
+        "Verifies setup at the end"
+      ],
+      "files": []
+    }
+  ]
+}

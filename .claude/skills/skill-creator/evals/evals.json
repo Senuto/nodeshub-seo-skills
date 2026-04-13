@@ -1,0 +1,31 @@
+{
+  "skill_name": "skill-creator",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Create a new skill called 'nod-backlink-checker' that checks backlinks for a domain.",
+      "expected_output": "Should scaffold the skill directory with SKILL.md, scripts/, evals/ directories, and register it in CLAUDE.md and the skills registry.",
+      "assertions": [
+        "Creates .claude/skills/nod-backlink-checker/ directory",
+        "Creates SKILL.md with proper frontmatter",
+        "Creates scripts/ directory with template script",
+        "Creates evals/ directory",
+        "Updates CLAUDE.md skill list",
+        "Updates nod-nodeshub-api SKILL.md registry"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Scaffold a new skill for tracking social mentions.",
+      "expected_output": "Should trigger skill creation, ask for skill name if not provided, and scaffold the directory structure.",
+      "assertions": [
+        "Triggers on skill creation language",
+        "Asks for or derives skill name",
+        "Creates proper directory structure",
+        "Registers the new skill"
+      ],
+      "files": []
+    }
+  ]
+}
