@@ -1,6 +1,6 @@
 # NodesHub API Reference
 
-Base URL: `https://api.serpdata.io/v1`
+Base URL: `https://api.nodeshub.io/v1`
 Auth: `Authorization: Bearer YOUR_API_KEY`
 Required header: `User-Agent` (any value)
 

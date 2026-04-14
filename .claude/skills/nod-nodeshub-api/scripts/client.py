@@ -17,7 +17,7 @@ import urllib.error
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
-BASE_URL = "https://api.serpdata.io/v1"
+BASE_URL = "https://api.nodeshub.io/v1"
 
 # Order: repo .claude/settings.local.json first, then root (legacy), then user home
 _REPO_CLAUDE = Path(__file__).resolve().parents[3]  # .claude/
