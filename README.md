@@ -1,3 +1,5 @@
+> By cloning or downloading this repository you accept the terms described in [TERMS-OF-USE.md](TERMS-OF-USE.md).
+
 # NodesHub SEO Skills – documentation
 
 A set of skills for SEO automation, built on the NodesHub API (live Google SERP data) and optionally OpenRouter (LLM for cluster naming and brief generation).
