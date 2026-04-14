@@ -16,10 +16,8 @@ from collections import Counter
 from pathlib import Path
 
 # Import shared client
-sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'nodeshub-api' / 'scripts'))
-from client import NodeshubClient, NodeshubError
-
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'nod-nodeshub-api' / 'scripts'))
+from client import NodeshubClient, NodeshubError
 from report import render_section_wrapper, make_section_id, html_table, summary_card, badge
 
 

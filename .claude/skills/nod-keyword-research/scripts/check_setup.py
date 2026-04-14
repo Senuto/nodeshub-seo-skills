@@ -5,5 +5,5 @@ import subprocess
 import sys
 from pathlib import Path
 
-check = Path(__file__).resolve().parents[2] / 'nodeshub-api' / 'scripts' / 'check_setup.py'
+check = Path(__file__).resolve().parents[2] / 'nod-nodeshub-api' / 'scripts' / 'check_setup.py'
 sys.exit(subprocess.call([sys.executable, str(check)]))

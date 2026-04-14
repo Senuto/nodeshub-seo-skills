@@ -14,7 +14,7 @@ import sys
 from pathlib import Path
 
 # Import shared client
-sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'nodeshub-api' / 'scripts'))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'nod-nodeshub-api' / 'scripts'))
 from client import NodeshubClient, NodeshubError
 
 
