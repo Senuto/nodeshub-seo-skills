@@ -22,6 +22,17 @@ python3 -c "import sys; sys.path.insert(0,'.claude/skills/nod-nodeshub-api/scrip
 
 Walk the user through connecting OpenRouter so they can use LLM-powered features in skills like `nod-serp-clusters` and `nod-paa-miner`. Do it **step by step**, asking for confirmation before continuing.
 
+## ⛔ CRITICAL SECURITY RULE — NEVER ASK THE USER TO PASTE THE API KEY INTO CHAT
+
+Anything the user types into the chat leaves their machine — it's sent to the LLM provider, written to local session logs (`~/.claude/projects/<slug>/*.jsonl`) in plain text, and may appear in telemetry, backups, or IDE sync. **A secret that touches the chat context is a leaked secret.** An OpenRouter key with credit attached can be burned by anyone who gets it.
+
+You MUST:
+- Never write "paste it here," "paste the key," "send me the key," or similar.
+- Never offer to save a key the user pastes.
+- If the user pastes a key anyway, stop, refuse to use it, tell them the key is now compromised and they should revoke it at openrouter.ai/keys immediately, then re-run setup with a new key saved locally.
+
+The user saves the key themselves (Step 2). You only read the file afterwards to verify.
+
 **Privacy:** The API key is stored in `.claude/settings.local.json` (gitignored).
 
 ---
@@ -52,26 +63,48 @@ else:
 
 ## Step 1: Get your API key
 
-1. Ask the user to open **[openrouter.ai/keys](https://openrouter.ai/keys)**.
+Tell the user — **do not** ask them to paste anything here:
+
+1. Open **[openrouter.ai/keys](https://openrouter.ai/keys)**.
 2. Sign in (Google, GitHub, or email).
 3. Click **"Create Key"**.
 4. Copy the key (starts with `sk-or-v1-...`).
 
 **Pricing:** OpenRouter is pay-per-use. Most skills use `google/gemini-2.5-flash-lite` which costs fractions of a cent per call. Add $5 credit to start — it lasts a long time for cluster naming.
 
-**Ask:** "Have you copied your API key? Paste it here when ready."
+Then say: "Copy the key to your clipboard. **Do not paste it into this chat.** Go to Step 2."
 
 ---
 
-## Step 2: Save the key
+## Step 2: The user saves the key locally (NOT via chat)
 
-When the user pastes the key, run:
+Give the user these two options. They run one themselves — you never see the key.
+
+**Option A — one-line terminal command (recommended):**
+
+Tell the user to open their terminal in the repo root, prepend a space (so it's skipped by shell history if `HISTCONTROL=ignorespace`/`ignoreboth` is set), paste their key in place of `<paste-your-key-here>`, and run:
 
 ```bash
-python3 .claude/skills/nod-nodeshub-api/scripts/save_openrouter_key.py "PASTE_THE_KEY_HERE"
+ python3 .claude/skills/nod-nodeshub-api/scripts/save_openrouter_key.py "<paste-your-key-here>"
 ```
 
 This saves the key to `.claude/settings.local.json` under `env.OPENROUTER_API_KEY` and runs a quick verification call.
+
+If their shell doesn't respect `ignorespace`, they can run `history -d <n>` afterwards to wipe that line.
+
+**Option B — edit the file manually:**
+
+Tell the user to open `.claude/settings.local.json` in their editor and add/merge:
+
+```json
+{
+  "env": {
+    "OPENROUTER_API_KEY": "<paste-your-key-here>"
+  }
+}
+```
+
+**Reply "done" (not the key) when saved.**
 
 Expected output:
 ```

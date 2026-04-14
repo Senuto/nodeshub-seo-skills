@@ -21,6 +21,17 @@ python3 -c "import sys; sys.path.insert(0,'.claude/skills/nod-nodeshub-api/scrip
 
 Walk the user through connecting Genuino API so they can use the `ai-score` skill to detect AI-generated content. Do it **step by step**, asking for confirmation before continuing.
 
+## ⛔ CRITICAL SECURITY RULE — NEVER ASK THE USER TO PASTE THE API KEY INTO CHAT
+
+Anything the user types into the chat leaves their machine — it's sent to the LLM provider, written to local session logs (`~/.claude/projects/<slug>/*.jsonl`) in plain text, and may appear in telemetry, backups, or IDE sync. **A secret that touches the chat context is a leaked secret.**
+
+You MUST:
+- Never write "paste it here," "paste the key," "send me the key," or similar.
+- Never offer to save a key the user pastes.
+- If the user pastes a key anyway, stop, refuse to use it, tell them the key is now compromised and they should rotate it in the Genuino dashboard, then re-run setup with the new key saved locally.
+
+The user saves the key themselves (Step 2). You only read the file afterwards to verify.
+
 **Privacy:** The API key is stored in `.claude/settings.local.json` (gitignored).
 
 ---
@@ -59,36 +70,46 @@ else:
 
 ## Step 1: Get your API key
 
-1. Ask the user to open **[genuino.ai](https://genuino.ai)**.
-2. Sign up / log in to the dashboard.
-3. Navigate to API keys section.
-4. Create a new API key and copy it.
+Tell the user — **do not** ask them to paste anything here:
 
-**Ask:** "Have you copied your API key? Paste it here when ready."
+1. Open **[genuino.ai](https://genuino.ai)**.
+2. Sign up / log in to the dashboard.
+3. Navigate to the API keys section.
+4. Create a new API key and copy it to the clipboard.
+
+Then say: "Copy the key to your clipboard. **Do not paste it into this chat.** Go to Step 2."
 
 ---
 
-## Step 2: Save the key
+## Step 2: The user saves the key locally (NOT via chat)
 
-When the user pastes the key, save it to `.claude/settings.local.json`:
+Give the user these two options. They run one themselves — you never see the key.
+
+**Option A — one-line terminal command (recommended):**
+
+Tell the user to open their terminal in the repo root, prepend a space (so it's skipped by shell history if `HISTCONTROL=ignorespace`/`ignoreboth` is set), paste their key in place of `<paste-your-key-here>`, and run:
 
 ```bash
-python3 -c "
-import json
-from pathlib import Path
-
-key = 'PASTE_THE_KEY_HERE'
-path = Path('.claude/settings.local.json')
-data = json.loads(path.read_text()) if path.is_file() else {}
-data.setdefault('env', {})['GENUINO_API_KEY'] = key
-path.write_text(json.dumps(data, indent=2) + '\n')
-print(f'Saved Genuino API key to {path}')
-"
+ python3 -c "import json; from pathlib import Path; p = Path('.claude/settings.local.json'); d = json.loads(p.read_text()) if p.is_file() else {}; d.setdefault('env', {})['GENUINO_API_KEY'] = '<paste-your-key-here>'; p.write_text(json.dumps(d, indent=2) + '\n'); print('Saved.')"
 ```
 
-Replace `PASTE_THE_KEY_HERE` with the actual key.
+If their shell doesn't respect `ignorespace`, they can run `history -d <n>` afterwards to wipe that line.
 
-**Ask:** "Key saved. Let me verify the connection."
+**Option B — edit the file manually:**
+
+Tell the user to open `.claude/settings.local.json` in their editor and add/merge:
+
+```json
+{
+  "env": {
+    "GENUINO_API_KEY": "<paste-your-key-here>"
+  }
+}
+```
+
+If the file already has other content, keep it and just add/update the `env.GENUINO_API_KEY` field.
+
+**Reply "done" (not the key) when saved.**
 
 ---
 

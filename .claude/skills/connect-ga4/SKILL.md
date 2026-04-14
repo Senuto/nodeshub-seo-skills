@@ -20,9 +20,19 @@ allowed-tools: Bash Read Write
 python3 -c "import sys; sys.path.insert(0,'.claude/skills/nod-nodeshub-api/scripts'); from banner import print_banner; print_banner('Connect GA4')"
 ```
 
-Then walk the user through connecting Google Analytics 4 so they can run `npm run fetch-ga4` and use analytics data. Do it **step by step**, and at each step ask for a paste or confirmation before continuing.
+Then walk the user through connecting Google Analytics 4 so they can run `npm run fetch-ga4` and use analytics data. Do it **step by step**, asking for confirmation before continuing.
 
-**Privacy:** Credentials (e.g. GA4 key file in `local/`) are stored in the repo in gitignored paths. **Tell the user: do not make this repo public** if it contains API keys or credential files — keep the repo private or ensure sensitive files stay out of version control.
+## ⛔ CRITICAL SECURITY RULE — NEVER ASK THE USER TO PASTE CREDENTIALS INTO CHAT
+
+Anything the user types into the chat leaves their machine — it's sent to the LLM provider, written to local session logs (`~/.claude/projects/<slug>/*.jsonl`) in plain text, and may appear in telemetry, backups, or IDE sync. This applies to the **contents of the JSON key file** (the private key inside it is a secret). It also applies to the Service Account `client_email` — while that email alone is not critical, combined with the private key in logs/backups it lets the holder call Google APIs under the user's project.
+
+You MUST:
+- Never ask the user to paste the contents of `ga4-credentials.json` into chat.
+- Never ask the user to paste the `client_email` into chat. Read it yourself from `local/ga4-credentials.json` once the user saves the file there (see Step 4).
+- The GA4 Property ID is a non-sensitive numeric ID and may be pasted if the user wants — but it's also fine to write it directly to `scripts/fetch-ga4.js` themselves.
+- If the user pastes the key file contents anyway, stop, refuse to use it, tell them to revoke that Service Account key in Google Cloud Console (IAM & Admin → Service Accounts → Keys → delete the leaked key) and create a new one before continuing.
+
+**Privacy:** The key file `local/ga4-credentials.json` is stored in a gitignored path. **Tell the user: do not make this repo public** if it contains the file — keep the repo private or ensure sensitive files stay out of version control.
 
 ---
 
@@ -73,12 +83,15 @@ Then walk the user through connecting Google Analytics 4 so they can run `npm ru
 
 ---
 
-## Step 4: Service Account email — paste here
+## Step 4: Read the Service Account email from the file
 
-1. Tell the user to open `local/ga4-credentials.json` and find the field **`client_email`**. It looks like: `something@project-id.iam.gserviceaccount.com`.
-2. **Ask them to paste the Service Account email here** (they can redact the middle part if they prefer, but you need the full email for the next step).
+Once the user confirms the key file is at `local/ga4-credentials.json`, **read the `client_email` yourself** — do not ask the user to paste it:
 
-When they paste it, confirm and go to Step 5.
+```bash
+python3 -c "import json; print(json.load(open('local/ga4-credentials.json'))['client_email'])"
+```
+
+Show the email to the user and tell them they will paste it into Google Analytics in the next step (that's a Google UI field, not this chat).
 
 ---
 

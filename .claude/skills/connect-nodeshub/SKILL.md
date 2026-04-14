@@ -20,7 +20,18 @@ allowed-tools: Bash Read Write
 python3 -c "import sys; sys.path.insert(0,'.claude/skills/nod-nodeshub-api/scripts'); from banner import print_banner; print_banner('Connect NodesHub')"
 ```
 
-Then walk the user through connecting the NodesHub API so they can use all nod- skills (SERP analysis, keyword research, rank tracking, content briefs, and more). Do it **step by step**, and at each step ask for a paste or confirmation before continuing.
+Then walk the user through connecting the NodesHub API so they can use all nod- skills (SERP analysis, keyword research, rank tracking, content briefs, and more). Do it **step by step**, asking for confirmation before continuing.
+
+## ⛔ CRITICAL SECURITY RULE — NEVER ASK THE USER TO PASTE THE API KEY INTO CHAT
+
+Anything the user types into the chat leaves their machine — it's sent to the LLM provider, written to local session logs (`~/.claude/projects/<slug>/*.jsonl`) in plain text, and may appear in telemetry, backups, or IDE sync. **A secret that touches the chat context is a leaked secret.**
+
+You MUST:
+- Never write "paste it here," "paste the key," "send me the key," or similar.
+- Never offer to save a key the user pastes.
+- If the user pastes a key anyway, stop, refuse to use it, tell them the key is now compromised and they should rotate it at nodeshub.io, then re-run the setup with the new key saved locally.
+
+The user saves the key themselves (see Step 2). You only read the file afterwards to verify.
 
 **Privacy:** The API key is stored in the repo in `.claude/settings.local.json` (that file is in `.gitignore`). **Tell the user: do not make this repo public** if it contains the API key — keep the repo private.
 
@@ -43,37 +54,47 @@ python3 .claude/skills/nod-nodeshub-api/scripts/check_setup.py
 
 ## Step 1: Get your API key
 
-1. Ask the user to open **[nodeshub.io](https://nodeshub.io)**.
-2. Tell them: scroll to the **API Playground** section.
-3. Click **"Copy to clipboard"** to copy the API key. No account or email verification is required.
+Tell the user — **do not** ask them to paste anything here:
 
-**Ask:** "Have you copied your API key? Paste it here when ready (you can redact the middle part if you prefer; I need the full key to save it)."
+1. Open **[nodeshub.io](https://nodeshub.io)**.
+2. Scroll to the **API Playground** section.
+3. Click **"Copy to clipboard"** to copy the API key. No account or email verification required.
+
+Then say: "Copy the key to your clipboard. **Do not paste it into this chat.** Go to Step 2."
 
 ---
 
-## Step 2: Save the key in the repo
+## Step 2: The user saves the key locally (NOT via chat)
 
-When the user pastes the API key:
+Give the user these two options. They run one themselves — you never see the key.
 
-1. Save it to `.claude/settings.local.json` in the repo. If the file already exists (e.g. with `permissions`), add or update the `env.NODESHUB_API_KEY` field. The file should look like:
-   ```json
-   {
-     "env": {
-       "NODESHUB_API_KEY": "the-key-they-pasted"
-     }
-   }
-   ```
-   If they already have other keys in the file (e.g. `permissions`), merge: keep existing content and set `env.NODESHUB_API_KEY`.
+**Option A — one-line terminal command (recommended):**
 
-2. **Alternatively**, run the helper script for them:
-   ```bash
-   python3 .claude/skills/nod-nodeshub-api/scripts/save_key.py "PASTE_THE_KEY_HERE"
-   ```
-   (Replace `PASTE_THE_KEY_HERE` with the key they pasted.)
+```bash
+python3 .claude/skills/nod-nodeshub-api/scripts/save_key.py "<paste-your-key-here>"
+```
 
-3. Remind them: `.claude/settings.local.json` is in `.gitignore`, so the key will not be committed. **Do not make the repo public** — it now contains private data.
+Tell the user:
+- Open their terminal, prepend a space before the command (so it won't land in shell history if `HISTCONTROL=ignorespace`/`ignoreboth` is set), paste their key in place of `<paste-your-key-here>`, and run it.
+- If their shell doesn't respect `ignorespace`, they can run `history -d <n>` afterwards to wipe that line.
 
-**Ask:** "I've saved your key. Have you restarted Claude Code (or the terminal) if needed? Reply yes to continue to verification."
+**Option B — edit the file manually:**
+
+Tell the user to open `.claude/settings.local.json` in their editor and add/merge:
+
+```json
+{
+  "env": {
+    "NODESHUB_API_KEY": "<paste-your-key-here>"
+  }
+}
+```
+
+If the file already has other content (e.g. `permissions`), keep it and just add/update the `env.NODESHUB_API_KEY` field.
+
+**Reply "done" (not the key) when saved.**
+
+Remind them: `.claude/settings.local.json` is in `.gitignore`, so the key will not be committed. **Do not make the repo public** — it now contains private data.
 
 ---
 
