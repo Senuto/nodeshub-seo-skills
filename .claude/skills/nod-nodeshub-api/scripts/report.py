@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """Unified HTML Report Builder for SEO Skills.
 
 Creates branded HTML reports with multiple sections. Each skill can render
