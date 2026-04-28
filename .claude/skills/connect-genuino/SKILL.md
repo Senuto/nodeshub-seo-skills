@@ -90,7 +90,7 @@ Give the user these two options. They run one themselves — you never see the k
 Tell the user to open their terminal in the repo root, prepend a space (so it's skipped by shell history if `HISTCONTROL=ignorespace`/`ignoreboth` is set), paste their key in place of `<paste-your-key-here>`, and run:
 
 ```bash
- python3 -c "import json; from pathlib import Path; p = Path('.claude/settings.local.json'); d = json.loads(p.read_text()) if p.is_file() else {}; d.setdefault('env', {})['GENUINO_API_KEY'] = '<paste-your-key-here>'; p.write_text(json.dumps(d, indent=2) + '\n'); print('Saved.')"
+ python3 .claude/skills/nod-nodeshub-api/scripts/save_genuino_key.py "<paste-your-key-here>"
 ```
 
 If their shell doesn't respect `ignorespace`, they can run `history -d <n>` afterwards to wipe that line.

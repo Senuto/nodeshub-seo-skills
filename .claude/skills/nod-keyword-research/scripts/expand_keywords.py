@@ -90,8 +90,15 @@ def main():
         json_output = json.dumps(output, indent=2, ensure_ascii=False)
 
         if args.output:
-            Path(args.output).write_text(json_output)
-            print(f"Saved to {args.output}", file=sys.stderr)
+            output_path = Path(args.output)
+            if output_path.is_dir() or args.output.endswith(("/", os.sep)):
+                os.makedirs(output_path, exist_ok=True)
+                safe_name = args.keywords[0].replace(" ", "_").replace("/", "_")[:30]
+                output_path = output_path / f"keywords_{safe_name}_{args.hl}.json"
+            else:
+                os.makedirs(output_path.parent or Path("."), exist_ok=True)
+            output_path.write_text(json_output)
+            print(f"Saved to {output_path}", file=sys.stderr)
         else:
             print(json_output)
 
