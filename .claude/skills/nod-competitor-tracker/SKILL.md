@@ -6,7 +6,6 @@ description: |
   Use when user says "track competitors," "competitor rankings," "who ranks for,"
   "competitor monitoring," "competitive analysis," or "competitor positions."
   Requires NODESHUB_API_KEY. Cost: 1 token per keyword checked.
-license: MIT
 compatibility: Requires Python 3.9+, NODESHUB_API_KEY, and internet access
 metadata:
   author: nodeshub

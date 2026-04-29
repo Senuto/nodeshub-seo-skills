@@ -7,7 +7,6 @@ description: |
   or target new ones. Use when user says "featured snippet," "answer box," "position
   zero," "snippet opportunities," "snippet hunter," "win snippets," or "steal snippet."
   Requires NODESHUB_API_KEY. Cost: 1 token per keyword.
-license: MIT
 compatibility: Requires Python 3.9+, NODESHUB_API_KEY, and internet access
 metadata:
   author: nodeshub

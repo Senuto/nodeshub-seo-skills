@@ -5,7 +5,6 @@ description: |
   and GA4 data (pageviews, sessions, events, traffic sources). Use when user says
   "connect GA4," "set up Google Analytics," "GA4 setup," "connect Analytics,"
   or "how to connect to GA4." No API cost — setup only.
-license: MIT
 compatibility: "Requires Node.js 18+, googleapis npm package, and Google Cloud Console access"
 metadata:
   author: nodeshub

@@ -9,7 +9,7 @@ This repository contains **Agent Skills** for AI agents following the [Agent Ski
 - **Name**: Nodeshub SEO Skills
 - **GitHub**: [Senuto/nodeshub-seo-skills](https://github.com/Senuto/nodeshub-seo-skills)
 - **Creator**: Senuto
-- **License**: MIT
+- **License**: Proprietary (see TERMS-OF-USE.md)
 
 ## Repository Structure
 
@@ -30,7 +30,7 @@ nodeshub-seo-skills/
 ├── AGENTS.md                # This file — agent guidelines
 ├── CLAUDE.md                # Claude Code project instructions & skill registry
 ├── CONTRIBUTING.md          # How to add or modify skills
-├── LICENSE                  # MIT
+├── LICENSE                  # Proprietary — see TERMS-OF-USE.md
 └── README.md
 ```
 
@@ -79,7 +79,6 @@ allowed-tools: Bash Read Write
 | `name`          | Yes      | 1-64 chars, lowercase `a-z`, numbers, hyphens. Must match dir. |
 | `description`   | Yes      | 1-1024 chars. Describe what it does and when to use it.        |
 | `allowed-tools` | No       | Space-separated list of tools the skill may use.               |
-| `license`       | No       | License name (default: MIT).                                   |
 | `metadata`      | No       | Key-value pairs (author, version, etc.).                       |
 
 ### Name Field Rules

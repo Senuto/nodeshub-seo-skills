@@ -7,7 +7,6 @@ description: |
   Other skills import from this module. Use when checking API balance, testing
   endpoints, or troubleshooting API connectivity. Keywords: NodesHub, API key,
   balance, credits, tokens, setup, connection test.
-license: MIT
 compatibility: "Requires Python 3.9+ and internet access"
 metadata:
   author: nodeshub

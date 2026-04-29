@@ -8,7 +8,6 @@ description: |
   "article brief," "create brief for keyword," "brief for content," "what to write
   about," or "content outline." Requires NODESHUB_API_KEY. For keyword research only see
   nod-keyword-research. For SERP analysis only see nod-serp-analysis.
-license: MIT
 compatibility: Requires Python 3.9+, NODESHUB_API_KEY, and internet access
 metadata:
   author: nodeshub

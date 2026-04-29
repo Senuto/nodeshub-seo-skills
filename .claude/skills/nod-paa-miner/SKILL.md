@@ -7,7 +7,6 @@ description: |
   Use when user says "PAA," "people also ask," "mine questions," "extract questions,"
   "FAQ questions," "question bank," "PAA mining," or "SERP questions."
   Requires NODESHUB_API_KEY. Cost: 1 token per keyword + optional OpenRouter for clustering.
-license: MIT
 compatibility: "Requires Python 3.9+, NODESHUB_API_KEY, and internet access. Optional: OPENROUTER_API_KEY for clustering"
 metadata:
   author: nodeshub

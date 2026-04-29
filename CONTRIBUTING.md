@@ -75,7 +75,6 @@ description: |
   What this skill does. Include trigger phrases that help agents
   recognize when to activate it. Use when user says "do X," "run Y,"
   or related phrases.
-license: MIT
 compatibility: "Requires Python 3.9+"
 metadata:
   author: your-name

@@ -7,7 +7,6 @@ description: |
   "group keywords," "topical clusters," "which keywords go together," or
   "cluster my keyword list." Requires NODESHUB_API_KEY + OPENROUTER_API_KEY.
   Cost: 1 NodesHub token per keyword + OpenRouter LLM for naming.
-license: MIT
 compatibility: "Requires Python 3.9+, NODESHUB_API_KEY, OPENROUTER_API_KEY, and internet access"
 metadata:
   author: nodeshub

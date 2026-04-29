@@ -7,7 +7,6 @@ description: |
   Use when user says "AI score," "AI detection," "check if AI," "is this AI content,"
   "genuino check," "AI probability," "humanize text," or "content authenticity."
   Requires GENUINO_API_KEY.
-license: MIT
 compatibility: "Requires Python 3.9+, GENUINO_API_KEY, and internet access. Optional: JINA_API_KEY for URL analysis"
 metadata:
   author: nodeshub
