@@ -36,7 +36,10 @@ from collections import defaultdict
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'nod-nodeshub-api' / 'scripts'))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 from openrouter_client import OpenRouterClient, OpenRouterError
+from clustering.louvain import louvain_communities
+from clustering.naming import name_clusters
 
 
 # ── Embeddings ────────────────────────────────────────────────────
@@ -118,154 +121,7 @@ def cosine_similarity(a, b):
     return dot / (norm_a * norm_b)
 
 
-# ── Louvain Community Detection ───────────────────────────────────
-
-def louvain_communities(nodes, edges, resolution=1.0):
-    """Simplified Louvain modularity optimization.
-
-    Args:
-        nodes: list of node IDs
-        edges: list of (node_a, node_b, weight)
-        resolution: higher = more clusters
-
-    Returns:
-        dict of {node: community_id}
-    """
-    if not nodes:
-        return {}
-
-    # Build adjacency
-    adj = defaultdict(lambda: defaultdict(float))
-    node_strength = defaultdict(float)  # weighted degree
-    total_weight = 0.0
-
-    for a, b, w in edges:
-        adj[a][b] += w
-        adj[b][a] += w
-        node_strength[a] += w
-        node_strength[b] += w
-        total_weight += w
-
-    if total_weight == 0:
-        return {n: i for i, n in enumerate(nodes)}
-
-    m2 = 2 * total_weight
-
-    # Initialize: each node in its own community
-    community = {n: i for i, n in enumerate(nodes)}
-    comm_internal = defaultdict(float)  # sum of internal edge weights
-    comm_total = defaultdict(float)     # sum of all edge weights to community
-
-    for n in nodes:
-        comm_total[community[n]] = node_strength.get(n, 0.0)
-
-    for a, b, w in edges:
-        if community[a] == community[b]:
-            comm_internal[community[a]] += w
-
-    # Iterate
-    improved = True
-    max_iterations = 50
-    iteration = 0
-
-    while improved and iteration < max_iterations:
-        improved = False
-        iteration += 1
-        node_order = list(nodes)
-        random.shuffle(node_order)
-
-        for node in node_order:
-            current_comm = community[node]
-            ki = node_strength.get(node, 0.0)
-
-            # Compute weights to neighboring communities
-            neighbor_comms = defaultdict(float)
-            for neighbor, w in adj[node].items():
-                neighbor_comms[community[neighbor]] += w
-
-            # Weight to current community (excluding self-loops)
-            ki_in = neighbor_comms.get(current_comm, 0.0)
-
-            # Remove node from current community
-            comm_total[current_comm] -= ki
-            comm_internal[current_comm] -= ki_in
-
-            # Find best community
-            best_comm = current_comm
-            best_delta = 0.0
-
-            for comm, ki_comm in neighbor_comms.items():
-                sigma_tot = comm_total[comm]
-                delta = ki_comm - resolution * sigma_tot * ki / m2
-                if delta > best_delta:
-                    best_delta = delta
-                    best_comm = comm
-
-            # Also check staying in current (now empty of this node)
-            sigma_tot_current = comm_total[current_comm]
-            delta_current = ki_in - resolution * sigma_tot_current * ki / m2
-            if delta_current >= best_delta:
-                best_comm = current_comm
-                best_delta = delta_current
-
-            # Move node
-            community[node] = best_comm
-            comm_total[best_comm] += ki
-            comm_internal[best_comm] += neighbor_comms.get(best_comm, 0.0)
-
-            if best_comm != current_comm:
-                improved = True
-
-    # Renumber communities to 0..N
-    unique_comms = sorted(set(community.values()))
-    remap = {c: i for i, c in enumerate(unique_comms)}
-    return {n: remap[c] for n, c in community.items()}
-
-
-# ── LLM Cluster Naming ────────────────────────────────────────────
-
-def name_clusters(clusters, llm_client, model, language="Polish"):
-    """Use LLM to generate cluster names.
-
-    Args:
-        clusters: list of (cluster_id, keywords_list)
-        llm_client: OpenRouterClient instance
-        model: LLM model string
-        language: language for cluster names
-
-    Returns:
-        dict of {cluster_id: name}
-    """
-    names = {}
-    batch_size = 10
-    for batch_start in range(0, len(clusters), batch_size):
-        batch = clusters[batch_start:batch_start + batch_size]
-        cluster_descriptions = []
-        for idx, (cid, kws) in enumerate(batch):
-            sample = kws[:15]
-            cluster_descriptions.append(f"Cluster {idx}: {', '.join(sample)}")
-
-        prompt = f"""Name each keyword cluster with a short, descriptive label (2-5 words) in {language}.
-The name should capture the main topic/intent of the keywords.
-
-{chr(10).join(cluster_descriptions)}
-
-Respond ONLY with JSON: {{"0": "name", "1": "name"}}"""
-
-        try:
-            response = llm_client.chat(prompt, model=model, temperature=0.2, max_tokens=1000)
-            response = response.strip()
-            if response.startswith("```"):
-                response = response.split("\n", 1)[1].rsplit("```", 1)[0].strip()
-            parsed = json.loads(response)
-            for key, name in parsed.items():
-                names[batch[int(key)][0]] = name
-        except (json.JSONDecodeError, OpenRouterError, ValueError, IndexError) as e:
-            print(f"  LLM naming error: {e}", file=sys.stderr)
-            for cid, kws in batch:
-                names.setdefault(cid, f"Cluster {cid}")
-
-    return names
+# Louvain community detection and LLM naming live in clustering/ — imported above.
 
 
 # ── Main ──────────────────────────────────────────────────────────
