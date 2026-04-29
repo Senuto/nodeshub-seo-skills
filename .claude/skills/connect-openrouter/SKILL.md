@@ -5,7 +5,6 @@ description: |
   (SERP clustering with cluster naming, PAA question clustering, semantic clustering).
   Use when user says "connect OpenRouter," "set up OpenRouter," "OpenRouter setup,"
   "OpenRouter API key," or "how to connect to OpenRouter." No API cost — setup only.
-license: MIT
 compatibility: "Requires internet access for OpenRouter API key registration"
 metadata:
   author: nodeshub

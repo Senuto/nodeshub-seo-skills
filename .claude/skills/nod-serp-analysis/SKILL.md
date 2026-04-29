@@ -8,7 +8,6 @@ description: |
   ranking for," "SERP overview," "search results analysis," or "top 10 for keyword."
   Requires NODESHUB_API_KEY. For keyword expansion see nod-keyword-research. For full
   SEO audit see nod-content-auditor.
-license: MIT
 compatibility: "Requires Python 3.9+, NODESHUB_API_KEY, and internet access"
 metadata:
   author: nodeshub

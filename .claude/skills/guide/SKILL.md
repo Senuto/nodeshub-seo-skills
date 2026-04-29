@@ -5,7 +5,6 @@ description: |
   available, how skills and agents work, and helps users get started based on their goal.
   Use when user says "guide," "help me start," "what can you do," "how does this work,"
   "getting started," "onboarding," "show me skills," or "co tu jest."
-license: MIT
 compatibility: "No requirements — informational skill"
 metadata:
   author: nodeshub

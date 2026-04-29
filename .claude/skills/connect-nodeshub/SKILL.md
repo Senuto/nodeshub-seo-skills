@@ -5,7 +5,6 @@ description: |
   (SERP analysis, keyword research, rank tracking, content briefs, etc.). Use when
   user says "connect NodesHub," "set up NodesHub," "NodesHub setup," "API key
   NodesHub," or "how to connect to NodesHub." No API cost — setup only.
-license: MIT
 compatibility: "Requires internet access for NodesHub API key registration"
 metadata:
   author: nodeshub

@@ -9,7 +9,6 @@ description: |
   competitive," "what am I missing," or "content refresh."
   Requires NODESHUB_API_KEY. Optional: JINA_API_KEY (works without, 20 RPM limit).
   Cost: ~8.5 NodesHub tokens (standard) per audit + Jina Reader (free tier).
-license: MIT
 compatibility: Requires Python 3.9+, NODESHUB_API_KEY, and internet access. Optional: JINA_API_KEY
 metadata:
   author: nodeshub

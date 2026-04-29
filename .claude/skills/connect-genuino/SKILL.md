@@ -4,7 +4,6 @@ description: |
   Step-by-step guide to connect Genuino AI Detection API so you can check if content
   is AI-generated or human-written. Use when user says "connect Genuino," "set up Genuino,"
   "Genuino setup," "Genuino API key," or "how to connect to Genuino." No API cost — setup only.
-license: MIT
 compatibility: "Requires internet access for Genuino API key registration"
 metadata:
   author: nodeshub

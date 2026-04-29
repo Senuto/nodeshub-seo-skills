@@ -5,7 +5,6 @@ description: |
   and GSC data (queries, impressions, clicks). Use when user says "connect GSC,"
   "set up Google Search Console," "GSC setup," "connect Search Console," or
   "how to connect to GSC." No API cost — setup only.
-license: MIT
 compatibility: "Requires Node.js 18+, googleapis npm package, and Google Cloud Console access"
 metadata:
   author: nodeshub

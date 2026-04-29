@@ -7,7 +7,6 @@ description: |
   queries," "keyword ideas," "long-tail keywords," "keyword clustering," "topical map,"
   "what do people search for," or "keyword expansion." Requires NODESHUB_API_KEY.
   For analyzing search results see nod-serp-analysis. For content planning see nod-content-brief.
-license: MIT
 compatibility: Requires Python 3.9+, NODESHUB_API_KEY, and internet access
 metadata:
   author: nodeshub

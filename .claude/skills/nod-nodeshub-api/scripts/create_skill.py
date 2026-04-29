@@ -59,7 +59,6 @@ name: {name}
 description: |
   {description}
   Requires NODESHUB_API_KEY. Cost: {cost} per keyword.
-license: MIT
 compatibility: "Requires Python 3.9+, NODESHUB_API_KEY, and internet access"
 metadata:
   author: nodeshub
@@ -112,7 +111,6 @@ name: {name}
 description: |
   {description}
   Use when user says "{title.lower()}," or related phrases.
-license: MIT
 compatibility: "Requires Python 3.9+"
 metadata:
   author: nodeshub

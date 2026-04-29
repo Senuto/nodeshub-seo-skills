@@ -2,7 +2,7 @@
   "name": "nodeshub-seo-skills",
   "version": "0.1.0",
   "description": "SEO automation toolkit for Claude Code — powered by NodesHub API. Run npx nodeshub-seo-skills to install skills into any project.",
-  "license": "MIT",
+  "license": "SEE LICENSE IN TERMS-OF-USE.md",
   "author": "Senuto",
   "repository": {
     "type": "git",

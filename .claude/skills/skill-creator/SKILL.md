@@ -7,7 +7,6 @@ description: |
   Automatically updates the skills table in nod-nodeshub-api/SKILL.md and the skills list
   in CLAUDE.md. Use when user says "create skill," "new skill," "scaffold skill,"
   "add skill," or "skill creator."
-license: MIT
 compatibility: "Requires Python 3.9+"
 metadata:
   author: nodeshub
@@ -71,7 +70,6 @@ python3 .claude/skills/nod-nodeshub-api/scripts/create_skill.py \
 name: {name}
 description: |
   {description with trigger phrases}
-license: MIT
 compatibility: "{environment requirements}"
 metadata:
   author: nodeshub
@@ -80,7 +78,7 @@ allowed-tools: Bash Read Write
 ---
 ```
 
-All six Agent Skills spec fields — `name`, `description`, `license`, `compatibility`, `metadata`, `allowed-tools`.
+All five Agent Skills spec fields — `name`, `description`, `compatibility`, `metadata`, `allowed-tools`.
 
 ## Banner Requirement
 
@@ -109,7 +107,6 @@ Located in `.claude/skills/nod-nodeshub-api/scripts/`:
 |-------------|--------------------------|
 | `name` (lowercase, hyphens, max 64) | Validated before creation |
 | `description` (1-1024 chars, trigger phrases) | Template includes trigger phrase pattern |
-| `license` | Always MIT |
 | `compatibility` | Auto-set based on skill type |
 | `metadata` (author, version) | Always included (nodeshub, 0.1.0) |
 | `allowed-tools` | Default: Bash Read Write |
