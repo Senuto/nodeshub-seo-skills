@@ -62,7 +62,21 @@ Jina Reader fetches competitor page content as clean markdown. Used to analyze w
 5. **Map keyword opportunities** — related queries, questions, long-tail
 6. **Determine intent** — match content format to dominant search intent
 7. **Generate brief** — structured brief using output template
-8. **Present to user** — with clear recommendations and alternatives
+8. **Save brief to file** — write to `output/data/briefs/{keyword_slug}.md` using the Write tool
+9. **Present to user** — confirm saved path, offer to add to HTML report
+
+### Saving the brief
+
+After generating, always save the brief as a markdown file:
+
+```
+output/data/briefs/{keyword_slug}.md
+```
+
+Where `keyword_slug` = keyword lowercased, spaces replaced with `-`, special chars removed.
+Example: `"drzwi zewnętrzne martom"` → `output/data/briefs/drzwi-zewnetrzne-martom.md`
+
+Use the Write tool to save. Then tell the user the path.
 
 ### Crawling competitors with Jina Reader
 
