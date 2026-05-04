@@ -145,8 +145,10 @@ for k, name, cmd in [
 # GSC and GA4 use OAuth credentials files, not API keys
 gsc = Path('credentials/gsc_credentials.json')
 ga4 = Path('credentials/ga4_credentials.json')
-print(f'Google Search Console: {\"CONNECTED\" if gsc.exists() else \"NOT CONNECTED — run /connect-gsc\"}')
-print(f'Google Analytics 4: {\"CONNECTED\" if ga4.exists() else \"NOT CONNECTED — run /connect-ga4\"}')
+gsc_status = 'CONNECTED' if gsc.exists() else 'NOT CONNECTED — run /connect-gsc'
+ga4_status = 'CONNECTED' if ga4.exists() else 'NOT CONNECTED — run /connect-ga4'
+print(f'Google Search Console: {gsc_status}')
+print(f'Google Analytics 4: {ga4_status}')
 " 2>&1
 ```
 

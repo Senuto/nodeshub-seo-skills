@@ -18,10 +18,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'nod-nodeshub-api' / 'scripts'))
 from client import NodeshubClient, NodeshubError
-from report import render_section_wrapper, make_section_id, html_table, summary_card, bar_chart, badge
+from report import render_section_wrapper, make_section_id, html_table, summary_card, bar_chart, badge, find_repo_root
 import serp_cache
 
-_PROJECT_ROOT = Path(__file__).resolve().parents[4]
+_PROJECT_ROOT = find_repo_root()
 MAX_WORKERS = 5
 
 

@@ -8,15 +8,16 @@ TTL: 24 hours by default. Pass ttl_hours=0 to disable expiry.
 """
 
 import json
+import os
 import re
 import time
 from pathlib import Path
 
+from report import find_repo_root
+
 DEFAULT_TTL_HOURS = 24
 
-# Anchored to project root (4 levels up from this file)
-_PROJECT_ROOT = Path(__file__).resolve().parents[4]
-_CACHE_DIR = _PROJECT_ROOT / "output" / "data" / "serp-cache"
+_CACHE_DIR = find_repo_root() / "output" / "data" / "serp-cache"
 
 
 def _slug(keyword: str) -> str:
@@ -44,10 +45,12 @@ def get(keyword: str, gl: str, hl: str, ttl_hours: float = DEFAULT_TTL_HOURS):
 
 
 def put(keyword: str, gl: str, hl: str, serp_data: dict) -> None:
-    """Save SERP response to cache."""
+    """Save SERP response to cache (atomic write via temp + rename)."""
     p = _path(keyword, gl, hl)
     p.parent.mkdir(parents=True, exist_ok=True)
-    p.write_text(json.dumps(serp_data, ensure_ascii=False), encoding="utf-8")
+    tmp = p.with_suffix(".tmp")
+    tmp.write_text(json.dumps(serp_data, ensure_ascii=False), encoding="utf-8")
+    os.replace(tmp, p)
 
 
 def search_cached(client, keyword: str, gl: str, hl: str,

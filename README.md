@@ -463,7 +463,7 @@ python3 .claude/skills/nod-nodeshub-api/scripts/params.py languages
 
 ## Where data is stored
 
-All output is saved under the `output/` folder (gitignored – data accumulates between sessions).
+All output is saved under the `output/` folder (gitignored – data accumulates between sessions). The directory structure is created by `bin/install.mjs` during installation; scripts also auto-create missing directories at runtime via `mkdir(parents=True)`.
 
 | Skill | Path |
 |---|---|
@@ -479,6 +479,15 @@ All output is saved under the `output/` folder (gitignored – data accumulates 
 | HTML / Markdown reports | `output/reports/` |
 
 ## Infrastructure & setup
+
+After cloning, run `node bin/install.mjs` to scaffold directories and create `.claude/settings.local.json` from the included template. The template contains four API key placeholders:
+
+| Key | Required | Used by |
+|---|---|---|
+| `NODESHUB_API_KEY` | Yes | All `nod-` skills (SERP data) |
+| `OPENROUTER_API_KEY` | No | SERP cluster naming, PAA clustering |
+| `GENUINO_API_KEY` | No | AI score, content humanizer |
+| `JINA_API_KEY` | No | Content auditor competitor crawl (free tier works without key) |
 
 The following setup commands and utilities are available in Claude Code:
 
@@ -559,7 +568,7 @@ SERP results are cached locally to avoid redundant API calls and save tokens. If
 
 - Cache location: `output/data/serp-cache/{gl}-{hl}/{keyword}.json`
 - Default TTL: 24 hours (configurable in `.claude/skills/nod-nodeshub-api/scripts/serp_cache.py`)
-- Force a fresh fetch: pass `--no-cache` to `nod-serp-clusters` (other skills use the cache transparently and bypass it automatically for cache misses)
+- Force a fresh fetch: pass `--no-cache` to `nod-serp-clusters` (only this skill exposes the flag; other skills use the cache transparently — delete the cached file manually or wait for TTL expiry to force a refresh)
 
 ## Security
 
