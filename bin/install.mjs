@@ -75,14 +75,21 @@ if (existsSync(agentsSrc)) {
 
 log('Creating directory structure...');
 const dirs = [
-  'data/rank-history',
-  'data/competitor-tracking',
-  'data/visibility',
-  'data/gsc',
+  'output/data/rank-history',
+  'output/data/competitor-tracking',
+  'output/data/visibility',
+  'output/data/gsc',
+  'output/data/serp-cache',
+  'output/data/briefs',
+  'output/data/keywords',
+  'output/data/paa',
+  'output/data/topics',
+  'output/data/articles',
+  'output/reports',
+  'output/knowledge/metrics/seo',
+  'output/knowledge/metrics/analytics',
   'docs',
   'scripts',
-  'knowledge/metrics/seo',
-  'knowledge/metrics/analytics',
   'local',
 ];
 for (const d of dirs) {
@@ -263,7 +270,20 @@ if (existsSync(brandingSrc)) {
   log('  Edit brand-config.json with your colors and fonts');
 }
 
-// ── 8. Update .gitignore ────────────────────────────────────────────
+// ── 8. Create .claude/settings.local.json from template ─────────────
+
+log('Setting up settings.local.json...');
+const settingsExampleSrc = join(pkgRoot, '.claude', 'settings.local.json.example');
+const settingsDst = join(dest, '.claude', 'settings.local.json');
+if (existsSync(settingsExampleSrc) && !existsSync(settingsDst)) {
+  ensureDir(join(dest, '.claude'));
+  writeFileSync(settingsDst, readFileSync(settingsExampleSrc));
+  ok('.claude/settings.local.json created (fill in your API keys)');
+} else if (existsSync(settingsDst)) {
+  ok('.claude/settings.local.json (already exists, skipped)');
+}
+
+// ── 9. Update .gitignore ────────────────────────────────────────────
 
 log('Updating .gitignore...');
 
