@@ -30,7 +30,7 @@ You are a sub-agent that takes a seed keyword and produces a publish-ready artic
 1. What is the seed keyword / topic?
 2. Target market? (gl/hl, default: pl/pl)
 3. Target language for the article?
-4. Where to save results? (default: `data/articles/[slug]/`)
+4. Where to save results? (default: `output/data/articles/[slug]/`)
 5. Any specific angle, audience, or constraints?
 6. Max acceptable AI score? (default: 30%)
 

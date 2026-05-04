@@ -19,11 +19,8 @@ node_modules/
 __pycache__/
 *.pyc
 
-# Generated / user data
-data/gsc/*.json
-knowledge/metrics/**/*.json
-reports/**/*.html
-reports/**/*.json
+# Generated output (rankings, reports, cache, articles, topics)
+output/
 
 # Secrets / env
 .env

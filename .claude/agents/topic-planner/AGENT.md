@@ -26,7 +26,7 @@ You are a sub-agent that orchestrates end-to-end topic research. You compose 3 s
 **Ask the user:**
 1. What is the seed keyword / topic?
 2. What market? (gl/hl, default: pl/pl)
-3. Where to save results? (default: `data/topics/[slug]/`)
+3. Where to save results? (default: `output/data/topics/[slug]/`)
 4. Which clustering method? SERP-based (default) or Semantic?
 5. How many content briefs? (default: top 5 clusters)
 
