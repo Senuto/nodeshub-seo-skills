@@ -96,11 +96,11 @@ python3 .claude/skills/nod-nodeshub-api/scripts/fanout.py "seed keyword" --hl en
 
 Prompt the user with something like:
 > Where should I save the results? You can:
-> 1. Use an existing directory (e.g., `output/`, `research/seo/`)
-> 2. Create a new one (e.g., `output/seo_campaign_2026/`)
+> 1. Use an existing directory (e.g., `output/data/keywords/my-project/`)
+> 2. Create a new one (e.g., `output/data/keywords/seo_campaign_2026/`)
 
 - If the user specifies a directory, pass it via `--output <dir>/keywords_<keyword>_<gl>.csv`
-- If the user doesn't specify, suggest a sensible default: `output/<keyword>_<gl>/`
+- If the user doesn't specify, suggest a sensible default: `output/data/keywords/<keyword_slug>/`
 - If the directory doesn't exist, create it (the script handles this automatically)
 - For multi-keyword research, keep all files in the same directory for easy access
 
