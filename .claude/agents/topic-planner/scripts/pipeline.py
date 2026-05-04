@@ -55,7 +55,7 @@ def main():
     parser.add_argument("keyword", help="Seed keyword / topic")
     parser.add_argument("--gl", default="pl", help="Country code (default: pl)")
     parser.add_argument("--hl", default="pl", help="Language code (default: pl)")
-    parser.add_argument("--output-dir", help="Output directory (default: data/topics/[slug]/)")
+    parser.add_argument("--output-dir", help="Output directory (default: output/data/topics/[slug]/)")
     parser.add_argument("--skip-to", type=int, default=1, choices=[1, 2, 3],
                         help="Skip to step N (1=keywords, 2=clusters, 3=briefs)")
     # Step 1 params
@@ -74,7 +74,7 @@ def main():
     args = parser.parse_args()
 
     slug = slugify(args.keyword)
-    output_dir = Path(args.output_dir) if args.output_dir else Path(f"data/topics/{slug}")
+    output_dir = Path(args.output_dir) if args.output_dir else Path(f"output/data/topics/{slug}")
     output_dir.mkdir(parents=True, exist_ok=True)
 
     kw_csv = output_dir / "01_keywords.csv"

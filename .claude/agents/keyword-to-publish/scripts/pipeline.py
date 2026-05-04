@@ -136,7 +136,7 @@ def main():
     parser.add_argument("--hl", default="pl", help="Language code (default: pl)")
     parser.add_argument("--lang", default=None,
                         help="Article language (default: auto from --hl)")
-    parser.add_argument("--output-dir", help="Output directory (default: data/articles/[slug]/)")
+    parser.add_argument("--output-dir", help="Output directory (default: output/data/articles/[slug]/)")
     parser.add_argument("--skip-to", type=int, default=1, choices=[1, 2, 3, 4, 5, 6],
                         help="Skip to step N (requires previous step outputs)")
     # Step 1 params
@@ -155,7 +155,7 @@ def main():
     lang = args.lang or lang_map.get(args.hl, "English")
 
     slug = slugify(args.keyword)
-    output_dir = Path(args.output_dir) if args.output_dir else Path(f"data/articles/{slug}")
+    output_dir = Path(args.output_dir) if args.output_dir else Path(f"output/data/articles/{slug}")
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # File paths

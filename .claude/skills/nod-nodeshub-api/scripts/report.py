@@ -43,7 +43,7 @@ def _find_repo_root() -> Path:
 
 def _reports_dir() -> Path:
     """Return the reports/ directory, creating it if needed."""
-    d = _find_repo_root() / "reports"
+    d = _find_repo_root() / "output" / "reports"
     d.mkdir(parents=True, exist_ok=True)
     return d
 
