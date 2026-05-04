@@ -9,7 +9,6 @@ Usage:
 
 import argparse
 import json
-import os
 import sys
 import threading
 from collections import defaultdict
@@ -105,7 +104,7 @@ def main():
     parser.add_argument("--hl", default="en", help="Language code (default: en)")
     parser.add_argument("--watch", help="Comma-separated domains to highlight")
     parser.add_argument("--compare", action="store_true", help="Compare with previous snapshot")
-    parser.add_argument("--raw", action="store_true", help="Output raw JSON")
+    parser.add_argument("--raw", action="store_true", help="Output raw JSON to stdout (also saves snapshot to disk)")
     args = parser.parse_args()
 
     # Collect keywords
@@ -123,8 +122,6 @@ def main():
         sys.exit(1)
 
     watched = [d.strip().lower().replace("www.", "") for d in args.watch.split(",")] if args.watch else []
-
-
 
     print(f"Tracking competitors for {len(keywords)} keywords (cost: {len(keywords)} tokens)")
 
@@ -181,6 +178,7 @@ def main():
             "hl": args.hl,
             "watched_domains": watched,
             "keywords": keyword_results,
+            "domain_stats": {k: v for k, v in domain_stats.items()},
         }
         snapshot_path = data_dir / f"{date.today()}.json"
         snapshot_path.write_text(json.dumps(snapshot, indent=2, ensure_ascii=False) + "\n")
@@ -192,7 +190,7 @@ def main():
         # Sort domains by frequency
         sorted_domains = sorted(
             domain_stats.items(),
-            key=lambda x: (-len(x[1]["keywords"]), sum(x[1]["positions"]) / len(x[1]["positions"]))
+            key=lambda x: (-len(x[1]["keywords"]), sum(x[1]["positions"]) / max(len(x[1]["positions"]), 1))
         )
 
         # Print results

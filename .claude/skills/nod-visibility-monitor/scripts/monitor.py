@@ -9,10 +9,8 @@ Usage:
 
 import argparse
 import json
-import os
 import sys
 import threading
-from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date
 from pathlib import Path
@@ -107,7 +105,7 @@ def render_report_section(data):
         for d, info in competitors.items():
             comp_rows.append([e(d), str(info.get("score", 0)),
                               f"{info.get('visibility_pct', 0)}%"])
-        comp_rows.sort(key=lambda r: -int(r[1].split("/")[0]) if "/" not in r[1] else -int(r[1]))
+        comp_rows.sort(key=lambda r: -int(r[1]))
         parts.append("<h3>Competitor Comparison</h3>")
         parts.append(html_table(["Domain", "Score", "Visibility %"], comp_rows))
 
@@ -125,7 +123,7 @@ def main():
     parser.add_argument("--hl", default="en", help="Language code (default: en)")
     parser.add_argument("--competitors", help="Comma-separated competitor domains")
     parser.add_argument("--compare", action="store_true", help="Compare with previous snapshot")
-    parser.add_argument("--raw", action="store_true", help="Output raw JSON")
+    parser.add_argument("--raw", action="store_true", help="Output raw JSON to stdout (also saves snapshot to disk)")
     args = parser.parse_args()
 
     # Collect keywords
@@ -144,8 +142,6 @@ def main():
 
     competitors = [d.strip().lower().replace("www.", "") for d in args.competitors.split(",")] if args.competitors else []
     all_domains = [args.domain.lower().replace("www.", "")] + competitors
-
-
 
     print(f"Monitoring visibility for {args.domain} across {len(keywords)} keywords (cost: {len(keywords)} tokens)")
 

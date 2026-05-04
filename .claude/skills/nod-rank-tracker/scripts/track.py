@@ -9,7 +9,6 @@ Usage:
 
 import argparse
 import json
-import os
 import sys
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -137,7 +136,7 @@ def main():
     parser.add_argument("--gl", default="us", help="Country code (default: us)")
     parser.add_argument("--hl", default="en", help="Language code (default: en)")
     parser.add_argument("--compare", action="store_true", help="Compare with previous snapshot")
-    parser.add_argument("--raw", action="store_true", help="Output raw JSON")
+    parser.add_argument("--raw", action="store_true", help="Output raw JSON to stdout (also saves snapshot to disk)")
     args = parser.parse_args()
 
     # Collect keywords
@@ -153,8 +152,6 @@ def main():
     if not keywords:
         print("Error: No keywords provided. Use positional args or --file.", file=sys.stderr)
         sys.exit(1)
-
-
 
     print(f"Tracking {len(keywords)} keywords for {args.domain} (cost: {len(keywords)} tokens)")
 

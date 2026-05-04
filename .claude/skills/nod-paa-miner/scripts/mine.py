@@ -208,8 +208,6 @@ def main():
     try:
         client = NodeshubClient()
         questions_by_keyword = {}
-        total_raw = 0
-
         lock = threading.Lock()
         counter = [0]
 
@@ -224,10 +222,14 @@ def main():
                 with lock:
                     counter[0] += 1
                     n = counter[0]
-                paa, from_cache = future.result()
-                questions_by_keyword[kw] = paa
-                tag = "[cache]" if from_cache else "[api]"
-                print(f"  [{n}/{len(keywords)}] {kw}... {len(paa)} questions {tag}")
+                try:
+                    paa, from_cache = future.result()
+                    questions_by_keyword[kw] = paa
+                    tag = "[cache]" if from_cache else "[api]"
+                    print(f"  [{n}/{len(keywords)}] {kw}... {len(paa)} questions {tag}")
+                except NodeshubError as e:
+                    questions_by_keyword[kw] = []
+                    print(f"  [{n}/{len(keywords)}] {kw}... FAILED ({e})")
 
         total_raw = sum(len(v) for v in questions_by_keyword.values())
 
