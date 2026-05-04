@@ -155,6 +155,7 @@ After collecting data, ask the user:
 > 3. **Skip** — no report
 
 Use `render_report_section(snapshot)` from `monitor.py`, then `create_report()` or `append_section()` from `report.py`.
+Signatures: `create_report(title, sections=None, extra_head="")` and `append_section(report_path, section_html, extra_head="")`.
 
 ## Related Skills
 

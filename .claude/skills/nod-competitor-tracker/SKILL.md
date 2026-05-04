@@ -127,7 +127,16 @@ After collecting data, ask the user:
 > 2. **Existing report** — appends a section to a chosen report
 > 3. **Skip** — no report
 
-Use `render_report_section(data)` from `track.py`, then `create_report()` or `append_section()` from `report.py`.
+Use `render_report_section(data)` from `track.py`, then `create_report()` or `append_section()` from `report.py`:
+```python
+from report import create_report, append_section
+section_html = render_report_section(data)
+# New report:
+path = create_report("Competitor Tracker", sections=[section_html])
+# Append to existing report:
+path = append_section("output/reports/existing-report.html", section_html)
+```
+Signatures: `create_report(title, sections=None, extra_head="")` and `append_section(report_path, section_html, extra_head="")`.
 
 ## Related Skills
 
