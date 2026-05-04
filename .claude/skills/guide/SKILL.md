@@ -141,7 +141,19 @@ for k, name, cmd in [
 ]:
     status = 'CONNECTED' if d.get(k) else 'NOT CONNECTED'
     print(f'{name}: {status}' + (f' — run {cmd}' if status == 'NOT CONNECTED' else ''))
+
+# GSC and GA4 use OAuth credentials files, not API keys
+gsc = Path('credentials/gsc_credentials.json')
+ga4 = Path('credentials/ga4_credentials.json')
+print(f'Google Search Console: {\"CONNECTED\" if gsc.exists() else \"NOT CONNECTED — run /connect-gsc\"}')
+print(f'Google Analytics 4: {\"CONNECTED\" if ga4.exists() else \"NOT CONNECTED — run /connect-ga4\"}')
 " 2>&1
 ```
 
 Then offer to connect any missing APIs.
+
+**What GSC and GA4 unlock:**
+- **GSC** (`/connect-gsc`) → `scripts/fetch-gsc.js` — pulls real search queries, impressions, clicks, and average positions from your Google Search Console property
+- **GA4** (`/connect-ga4`) → `scripts/fetch-ga4.js` — pulls pageviews, sessions, traffic sources, and events from Google Analytics 4
+
+Both are optional — core SEO skills work without them.
