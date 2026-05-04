@@ -62,7 +62,7 @@ Visibility score is based on weighted positions:
 1. **Get domain, keywords, and optional competitors**
 2. **Check token balance** — 1 token per keyword
 3. **Run monitor** — fetches SERP for each keyword, calculates weighted scores
-4. **Save snapshot** to `data/visibility/{domain}/{YYYY-MM-DD}.json`
+4. **Save snapshot** to `output/data/visibility/{domain}/{YYYY-MM-DD}.json`
 5. **Compare** — vs previous snapshot and/or competitors
 6. **Report** — score, breakdown, trend
 
@@ -101,7 +101,7 @@ Visibility score is based on weighted positions:
 
 ## Data Storage
 
-Snapshots saved to: `data/visibility/{domain}/{YYYY-MM-DD}.json`
+Snapshots saved to: `output/data/visibility/{domain}/{YYYY-MM-DD}.json`
 
 ```json
 {

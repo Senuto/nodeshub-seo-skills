@@ -559,7 +559,7 @@ SERP results are cached locally to avoid redundant API calls and save tokens. If
 
 - Cache location: `output/data/serp-cache/{gl}-{hl}/{keyword}.json`
 - Default TTL: 24 hours (configurable in `.claude/skills/nod-nodeshub-api/scripts/serp_cache.py`)
-- Force a fresh fetch: pass `--no-cache` to any skill
+- Force a fresh fetch: pass `--no-cache` to `nod-serp-clusters` (other skills use the cache transparently and bypass it automatically for cache misses)
 
 ## Security
 

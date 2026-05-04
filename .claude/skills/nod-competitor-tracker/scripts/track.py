@@ -22,6 +22,7 @@ from client import NodeshubClient, NodeshubError
 from report import render_section_wrapper, make_section_id, html_table, summary_card, bar_chart, badge
 import serp_cache
 
+_PROJECT_ROOT = Path(__file__).resolve().parents[4]
 MAX_WORKERS = 5
 
 
@@ -47,7 +48,7 @@ def render_report_section(data):
     """
     from html import escape as e
     parts = []
-    keyword_results = data.get("keyword_results", {})
+    keyword_results = data.get("keywords", data.get("keyword_results", {}))
     domain_stats = data.get("domain_stats", {})
     watched = data.get("watched_domains", [])
 
@@ -157,10 +158,14 @@ def main():
                 with lock:
                     counter[0] += 1
                     n = counter[0]
-                top_10, from_cache = future.result()
-                keyword_results[kw] = {"top_10": top_10}
-                tag = "[cache]" if from_cache else "[api]"
-                print(f"  [{n}/{len(keywords)}] {kw}... {tag}")
+                try:
+                    top_10, from_cache = future.result()
+                    keyword_results[kw] = {"top_10": top_10}
+                    tag = "[cache]" if from_cache else "[api]"
+                    print(f"  [{n}/{len(keywords)}] {kw}... {tag}")
+                except NodeshubError as e:
+                    keyword_results[kw] = {"top_10": []}
+                    print(f"  [{n}/{len(keywords)}] {kw}... FAILED ({e})")
 
         for kw, kw_data in keyword_results.items():
             for entry in kw_data["top_10"]:
@@ -168,7 +173,7 @@ def main():
                 domain_stats[entry["domain"]]["positions"].append(entry["position"])
 
         # Save snapshot
-        data_dir = Path("output/data/competitor-tracking")
+        data_dir = _PROJECT_ROOT / "output" / "data" / "competitor-tracking"
         data_dir.mkdir(parents=True, exist_ok=True)
         snapshot = {
             "date": str(date.today()),

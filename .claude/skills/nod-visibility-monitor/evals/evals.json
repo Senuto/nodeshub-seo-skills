@@ -9,7 +9,7 @@
         "Fetches SERP data for all keywords",
         "Calculates weighted visibility score",
         "Shows per-keyword position breakdown",
-        "Saves snapshot to data/visibility/",
+        "Saves snapshot to output/data/visibility/",
         "Shows trend if previous snapshots exist"
       ],
       "files": []

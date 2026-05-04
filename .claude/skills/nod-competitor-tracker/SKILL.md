@@ -46,7 +46,7 @@ python3 .claude/skills/nod-nodeshub-api/scripts/check_setup.py
 1. **Get keywords and competitor domains** from user
 2. **Check token balance** — each keyword = 1 token
 3. **Run tracker** — fetches SERP for each keyword, extracts all domains in top 10
-4. **Save snapshot** to `data/competitor-tracking/{YYYY-MM-DD}.json`
+4. **Save snapshot** to `output/data/competitor-tracking/{YYYY-MM-DD}.json`
 5. **Compare with previous** if `--compare` flag
 6. **Report results** — domain frequency, positions, changes
 
@@ -77,7 +77,7 @@ python3 .claude/skills/nod-nodeshub-api/scripts/check_setup.py
 
 ## Data Storage
 
-Snapshots saved to: `data/competitor-tracking/{YYYY-MM-DD}.json`
+Snapshots saved to: `output/data/competitor-tracking/{YYYY-MM-DD}.json`
 
 ```json
 {

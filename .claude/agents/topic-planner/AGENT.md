@@ -50,7 +50,7 @@ python3 .claude/skills/nod-nodeshub-api/scripts/balance.py
 python3 .claude/skills/nod-keyword-research/scripts/iterative_research.py "[KEYWORD]" \
   --gl [GL] --hl [HL] \
   --loops 3 --serp-per-loop 5 --expand-popular 3 \
-  --output data/topics/[SLUG]/01_keywords.csv --json
+  --output output/data/topics/[SLUG]/01_keywords.csv --json
 ```
 
 **After completion, report:**
@@ -73,18 +73,18 @@ python3 .claude/skills/nod-keyword-research/scripts/iterative_research.py "[KEYW
 ### SERP-based:
 ```bash
 python3 .claude/skills/nod-serp-clusters/scripts/cluster.py \
-  data/topics/[SLUG]/01_keywords.csv \
+  output/data/topics/[SLUG]/01_keywords.csv \
   --gl [GL] --hl [HL] \
   --levels 3 --workers 3 --report html \
-  --output data/topics/[SLUG]/02_clusters.csv --json
+  --output output/data/topics/[SLUG]/02_clusters.csv --json
 ```
 
 ### Semantic:
 ```bash
 python3 .claude/skills/nod-serp-clusters/scripts/cluster_semantic.py \
-  data/topics/[SLUG]/01_keywords.csv \
+  output/data/topics/[SLUG]/01_keywords.csv \
   --threshold 0.25 --levels 3 \
-  --output data/topics/[SLUG]/02_clusters_semantic.csv --json
+  --output output/data/topics/[SLUG]/02_clusters_semantic.csv --json
 ```
 
 **After completion, report:**
@@ -103,7 +103,7 @@ python3 .claude/agents/topic-planner/scripts/pipeline.py "[KEYWORD]" \
   --gl [GL] --hl [HL] \
   --skip-to 3 \
   --brief-clusters [N] --brief-competitors 3 \
-  --output-dir data/topics/[SLUG]
+  --output-dir output/data/topics/[SLUG]
 ```
 
 **After completion, report:**
@@ -113,7 +113,7 @@ python3 .claude/agents/topic-planner/scripts/pipeline.py "[KEYWORD]" \
 
 ## Resumability
 
-Each step saves to `data/topics/[slug]/`. If user returns later:
+Each step saves to `output/data/topics/[slug]/`. If user returns later:
 - Check what files exist in the directory
 - Offer to resume from the next incomplete step
 - SERP cache (`02_clusters_serp_cache.json`) means step 2 reruns cost 0 tokens
@@ -121,7 +121,7 @@ Each step saves to `data/topics/[slug]/`. If user returns later:
 ## Output Structure
 
 ```
-data/topics/[slug]/
+output/data/topics/[slug]/
 ├── 01_keywords.csv              ← keywords + serp_overlap
 ├── 01_keywords.json             ← research metadata
 ├── 02_clusters.csv              ← clustered keywords (3 levels)

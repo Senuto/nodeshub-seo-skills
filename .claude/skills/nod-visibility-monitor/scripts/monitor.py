@@ -22,6 +22,7 @@ from client import NodeshubClient, NodeshubError
 from report import render_section_wrapper, make_section_id, html_table, summary_card, bar_chart, badge
 import serp_cache
 
+_PROJECT_ROOT = Path(__file__).resolve().parents[4]
 MAX_WORKERS = 5
 
 # Visibility scoring weights
@@ -168,10 +169,14 @@ def main():
                 with lock:
                     counter[0] += 1
                     n = counter[0]
-                organic, from_cache = future.result()
-                serp_results[kw] = organic
-                tag = "[cache]" if from_cache else "[api]"
-                print(f"  [{n}/{len(keywords)}] {kw}... {tag}")
+                try:
+                    organic, from_cache = future.result()
+                    serp_results[kw] = organic
+                    tag = "[cache]" if from_cache else "[api]"
+                    print(f"  [{n}/{len(keywords)}] {kw}... {tag}")
+                except NodeshubError as e:
+                    serp_results[kw] = []
+                    print(f"  [{n}/{len(keywords)}] {kw}... FAILED ({e})")
 
         for kw in keywords:
             organic = serp_results[kw]
@@ -188,7 +193,7 @@ def main():
 
         # Save snapshot
         primary = args.domain.lower().replace("www.", "")
-        data_dir = Path("output/data/visibility") / primary
+        data_dir = _PROJECT_ROOT / "output" / "data" / "visibility" / primary
         data_dir.mkdir(parents=True, exist_ok=True)
 
         snapshot = {

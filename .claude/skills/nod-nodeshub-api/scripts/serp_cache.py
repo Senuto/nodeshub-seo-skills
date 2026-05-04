@@ -1,6 +1,6 @@
 """Shared SERP disk cache for SEO skills.
 
-Saves full API responses to data/serp-cache/{gl}-{hl}/{keyword_slug}.json.
+Saves full API responses to output/data/serp-cache/{gl}-{hl}/{keyword_slug}.json.
 Any skill can call search_cached() instead of client.search() to avoid
 re-fetching the same keyword multiple times across different runs.
 

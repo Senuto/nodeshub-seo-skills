@@ -21,6 +21,7 @@ from client import NodeshubClient, NodeshubError
 from report import render_section_wrapper, make_section_id, html_table, summary_card, bar_chart, badge
 import serp_cache
 
+_PROJECT_ROOT = Path(__file__).resolve().parents[4]
 MAX_WORKERS = 5
 
 
@@ -193,7 +194,7 @@ def main():
                     print(f"  [{n}/{len(keywords)}] {kw}... FAILED ({e})")
 
         # Save snapshot
-        data_dir = Path("output/data/rank-history") / args.domain.replace("www.", "")
+        data_dir = _PROJECT_ROOT / "output" / "data" / "rank-history" / args.domain.lower().replace("www.", "")
         data_dir.mkdir(parents=True, exist_ok=True)
         snapshot = {
             "domain": args.domain,

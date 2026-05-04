@@ -26,7 +26,7 @@ _PROJECT_ROOT = Path(__file__).resolve().parents[4]
 
 
 def _slug(text):
-    return re.sub(r'[^a-z0-9]+', '-', text.lower()).strip('-')
+    return re.sub(r"[^\w\s-]", "", text.lower().strip()).replace(" ", "-")[:100]
 
 
 def _output_path(keywords, file_arg):
@@ -186,7 +186,7 @@ def main():
     parser.add_argument("--gl", default="us", help="Country code (default: us)")
     parser.add_argument("--hl", default="en", help="Language code (default: en)")
     parser.add_argument("--cluster", action="store_true", help="Cluster questions by topic (requires OPENROUTER_API_KEY)")
-    parser.add_argument("--raw", action="store_true", help="Output raw JSON")
+    parser.add_argument("--raw", action="store_true", help="Output raw JSON to stdout (also saves to disk)")
     args = parser.parse_args()
 
     # Collect keywords

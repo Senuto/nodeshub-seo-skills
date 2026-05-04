@@ -7,7 +7,7 @@ Orchestrates 3 steps:
   2. SERP Clustering (Weighted Jaccard + Louvain)
   3. Competitor Crawl + Content Brief (Jina Reader + LLM)
 
-Each step saves output to data/topics/[slug]/ — resumable from any step.
+Each step saves output to output/data/topics/[slug]/ — resumable from any step.
 
 Usage:
   python3 pipeline.py "pozycjonowanie stron" --gl pl --hl pl

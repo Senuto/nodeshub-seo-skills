@@ -10,7 +10,7 @@ Orchestrates 6 steps:
   5. AI Score Check + Humanization loop
   6. Content Audit vs Competition
 
-Each step saves output to data/articles/[slug]/ — resumable from any step.
+Each step saves output to output/data/articles/[slug]/ — resumable from any step.
 
 Usage:
   python3 pipeline.py "pozycjonowanie stron" --gl pl --hl pl
