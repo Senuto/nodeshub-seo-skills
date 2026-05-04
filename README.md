@@ -225,7 +225,7 @@ Classifies search intent based on SERP signals – not on the phrase itself, but
 
 Each keyword receives a percentage confidence score.
 
-**Cost:** 1 token per keyword.
+**Cost:** 2 tokens per keyword.
 
 **When to use:** When you have a list of keywords and want to match the content type to the intent – e.g., an informational guide for informational queries, a product page for transactional ones.
 
@@ -463,15 +463,20 @@ python3 .claude/skills/nod-nodeshub-api/scripts/params.py languages
 
 ## Where data is stored
 
+All output is saved under the `output/` folder (gitignored – data accumulates between sessions).
+
 | Skill | Path |
 |---|---|
-| Rank Tracker | `data/rank-history/{domain}/{YYYY-MM-DD}.json` |
-| Competitor Tracker | `data/competitor-tracking/{YYYY-MM-DD}.json` |
-| Visibility Monitor | `data/visibility/{domain}/{YYYY-MM-DD}.json` |
-| Keyword Research | User-specified directory, defaults to `output/` |
-| SERP Clusters | Alongside the input file (e.g., `keywords_clustered.csv`) |
-| Topic Planner | `data/topics/{slug}/` (keywords, clusters, briefs) |
-| Keyword to Publish | `data/articles/{slug}/` (keywords, SERP, brief, drafts, final article) |
+| Rank Tracker | `output/data/rank-history/{domain}/{YYYY-MM-DD}.json` |
+| Competitor Tracker | `output/data/competitor-tracking/{YYYY-MM-DD}.json` |
+| Visibility Monitor | `output/data/visibility/{domain}/{YYYY-MM-DD}.json` |
+| Keyword Research | `output/data/keywords/` |
+| PAA Miner | `output/data/paa/{slug}_{date}.json` |
+| Content Brief | `output/data/briefs/{slug}.md` |
+| SERP cache (shared) | `output/data/serp-cache/{gl}-{hl}/{keyword}.json` |
+| Topic Planner | `output/data/topics/{slug}/` (keywords, clusters, briefs) |
+| Keyword to Publish | `output/data/articles/{slug}/` (keywords, SERP, brief, drafts, final article) |
+| HTML / Markdown reports | `output/reports/` |
 
 ## Infrastructure & setup
 
@@ -484,6 +489,19 @@ The following setup commands and utilities are available in Claude Code:
 - `/connect-ga4` – guided Google Analytics 4 setup
 - `/guide` – interactive onboarding: explains what's available and routes you to the right skill based on your goal
 - `/skill-creator` – scaffold a new skill with the correct directory structure and auto-register it
+
+## Brand context (docs/ folder)
+
+The `docs/` folder contains editable Markdown templates that Claude reads automatically before any content-related task (briefs, audits, articles). Fill them in once and every skill output will reflect your brand from the start.
+
+| File | Contents |
+|---|---|
+| `docs/product.md` | Overview, key features, value proposition, pricing |
+| `docs/audiences.md` | Target segments and personas |
+| `docs/voice-tone.md` | Brand voice, tone guidelines, do's and don'ts |
+| `docs/competitors.md` | Direct/indirect competitors, positioning |
+| `docs/proof-points.md` | Statistics, case studies, testimonials |
+| `docs/brand-guidelines.md` | Logo, colors, typography, components |
 
 ## Branding
 
@@ -525,13 +543,23 @@ nodeshub-seo-skills/
 │   │   └── content-humanizer/  # Agent: text → AI score → rewrite → loop
 │   └── settings.local.json     # API keys (gitignored)
 ├── assets/branding/            # Logos, colors, fonts for HTML reports
-├── docs/                       # Product context (for briefs/audits)
-├── data/                       # Snapshots (rankings, visibility, topics, articles)
+├── docs/                       # Brand context files (auto-read by Claude before content tasks)
+├── output/                     # All generated data and reports (gitignored)
+│   ├── data/                   # Snapshots, keyword lists, briefs, SERP cache
+│   └── reports/                # HTML and Markdown reports
 ├── CLAUDE.md                   # Project instructions and skills registry
 ├── AGENTS.md                   # Agent specifications
 ├── CONTRIBUTING.md             # How to add/modify skills
 └── validate-skills.sh          # Skills structure validation
 ```
+
+## Caching
+
+SERP results are cached locally to avoid redundant API calls and save tokens. If you run the same keyword twice – even across different skills – the cached result is used at zero cost.
+
+- Cache location: `output/data/serp-cache/{gl}-{hl}/{keyword}.json`
+- Default TTL: 24 hours (configurable in `.claude/skills/nod-nodeshub-api/scripts/serp_cache.py`)
+- Force a fresh fetch: pass `--no-cache` to any skill
 
 ## Security
 
