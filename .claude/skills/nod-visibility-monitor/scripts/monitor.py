@@ -11,13 +11,18 @@ import argparse
 import json
 import os
 import sys
+import threading
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'nod-nodeshub-api' / 'scripts'))
 from client import NodeshubClient, NodeshubError
 from report import render_section_wrapper, make_section_id, html_table, summary_card, bar_chart, badge
+import serp_cache
+
+MAX_WORKERS = 5
 
 # Visibility scoring weights
 POSITION_POINTS = {
@@ -147,12 +152,29 @@ def main():
         client = NodeshubClient()
         domain_scores = {d: {"keywords": {}, "total": 0} for d in all_domains}
 
-        for i, kw in enumerate(keywords, 1):
-            print(f"  [{i}/{len(keywords)}] {kw}...", flush=True)
-            serp = client.search(kw, gl=args.gl, hl=args.hl)
-            data = serp.get("data", {})
-            organic = data.get("results", {}).get("organic_results", [])
+        lock = threading.Lock()
+        counter = [0]
+        serp_results = {}
 
+        def _fetch(kw):
+            serp, from_cache = serp_cache.search_cached(client, kw, args.gl, args.hl)
+            data = serp.get("data", {})
+            return data.get("results", {}).get("organic_results", []), from_cache
+
+        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+            futures = {executor.submit(_fetch, kw): kw for kw in keywords}
+            for future in as_completed(futures):
+                kw = futures[future]
+                with lock:
+                    counter[0] += 1
+                    n = counter[0]
+                organic, from_cache = future.result()
+                serp_results[kw] = organic
+                tag = "[cache]" if from_cache else "[api]"
+                print(f"  [{n}/{len(keywords)}] {kw}... {tag}")
+
+        for kw in keywords:
+            organic = serp_results[kw]
             for domain in all_domains:
                 pos = find_domain_position(organic, domain)
                 points = score_position(pos)
@@ -166,7 +188,7 @@ def main():
 
         # Save snapshot
         primary = args.domain.lower().replace("www.", "")
-        data_dir = Path("data/visibility") / primary
+        data_dir = Path("output/data/visibility") / primary
         data_dir.mkdir(parents=True, exist_ok=True)
 
         snapshot = {

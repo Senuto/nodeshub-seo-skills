@@ -11,13 +11,18 @@ import argparse
 import json
 import os
 import sys
+import threading
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'nod-nodeshub-api' / 'scripts'))
 from client import NodeshubClient, NodeshubError
 from report import render_section_wrapper, make_section_id, html_table, summary_card, bar_chart, badge
+import serp_cache
+
+MAX_WORKERS = 5
 
 
 def load_previous_snapshot(data_dir):
@@ -127,29 +132,43 @@ def main():
         keyword_results = {}
         domain_stats = defaultdict(lambda: {"keywords": [], "positions": []})
 
-        for i, kw in enumerate(keywords, 1):
-            print(f"  [{i}/{len(keywords)}] {kw}...", flush=True)
-            serp = client.search(kw, gl=args.gl, hl=args.hl)
+        lock = threading.Lock()
+        counter = [0]
+
+        def _fetch(kw):
+            serp, from_cache = serp_cache.search_cached(client, kw, args.gl, args.hl)
             data = serp.get("data", {})
             organic = data.get("results", {}).get("organic_results", [])
-
             top_10 = []
             for r in organic[:10]:
-                domain = r.get("domain", "").lower().replace("www.", "")
-                entry = {
+                d = r.get("domain", "").lower().replace("www.", "")
+                top_10.append({
                     "position": r.get("pos", r.get("global_pos")),
-                    "domain": domain,
+                    "domain": d,
                     "url": r.get("url", r.get("link", "")),
                     "title": r.get("title", ""),
-                }
-                top_10.append(entry)
-                domain_stats[domain]["keywords"].append(kw)
-                domain_stats[domain]["positions"].append(entry["position"])
+                })
+            return top_10, from_cache
 
-            keyword_results[kw] = {"top_10": top_10}
+        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+            futures = {executor.submit(_fetch, kw): kw for kw in keywords}
+            for future in as_completed(futures):
+                kw = futures[future]
+                with lock:
+                    counter[0] += 1
+                    n = counter[0]
+                top_10, from_cache = future.result()
+                keyword_results[kw] = {"top_10": top_10}
+                tag = "[cache]" if from_cache else "[api]"
+                print(f"  [{n}/{len(keywords)}] {kw}... {tag}")
+
+        for kw, kw_data in keyword_results.items():
+            for entry in kw_data["top_10"]:
+                domain_stats[entry["domain"]]["keywords"].append(kw)
+                domain_stats[entry["domain"]]["positions"].append(entry["position"])
 
         # Save snapshot
-        data_dir = Path("data/competitor-tracking")
+        data_dir = Path("output/data/competitor-tracking")
         data_dir.mkdir(parents=True, exist_ok=True)
         snapshot = {
             "date": str(date.today()),
