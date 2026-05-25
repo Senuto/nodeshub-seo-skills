@@ -26,7 +26,7 @@ nodeshub-seo-skills/
 ├── tools/                   # Integration guides
 ├── data/                    # Tracking data (rankings, visibility, competitors)
 ├── scripts/                 # Utility scripts (fetch-gsc.js, fetch-ga4.js)
-├── bin/                     # npm installer (npx nodeshub-seo-skills)
+├── bin/                     # npm installer
 ├── AGENTS.md                # This file — agent guidelines
 ├── CLAUDE.md                # Claude Code project instructions & skill registry
 ├── CONTRIBUTING.md          # How to add or modify skills

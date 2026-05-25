@@ -41,13 +41,7 @@ NodesHub is pay-as-you-go with no subscription required. New users receive **100
 
 ## Installation
 
-### A) npx (recommended) – installs skills into an existing project:
-
-```bash
-npx nodeshub-seo-skills
-```
-
-### B) Clone the repo:
+Clone the repo:
 
 ```bash
 git clone https://github.com/Senuto/nodeshub-seo-skills.git

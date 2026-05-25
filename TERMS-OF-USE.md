@@ -77,7 +77,7 @@ A JSON config file (colors, fonts, company data, and report settings), two SVG l
 
 H. Installer – 1 file
 
-A Node.js script run via npx nodeshub-seo-skills. Copies all of the elements listed above into the user's project directory.
+A Node.js script that copies all of the elements listed above into the user's project directory.
 
 I. Documentation – 5 files
 
