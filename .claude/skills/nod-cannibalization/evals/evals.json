@@ -1,0 +1,48 @@
+{
+  "skill_name": "nod-cannibalization",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Check my site for keyword cannibalization using the latest GSC export.",
+      "expected_output": "Should locate the newest gsc-*.json export, read queryPages, group by query, flag queries where two or more pages compete, score severity, and recommend a fix per conflict. Saves a dated JSON report.",
+      "assertions": [
+        "Triggers on cannibalization language",
+        "Reads queryPages from the GSC export (or instructs to re-run npm run fetch-gsc if missing)",
+        "Flags queries with two or more distinct competing pages",
+        "Assigns a severity tag (high / medium / low) per conflict",
+        "Gives a rule-based recommendation (consolidate, canonical, or de-optimize)",
+        "Saves report to data/cannibalization/{date}.json",
+        "Reports 0 NodesHub tokens used"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Run the cannibalization detector on the demo data and show me the worst conflict.",
+      "expected_output": "Should run detect.py --demo against the bundled fixture, print a table summary, and surface the highest-severity conflict (the evenly-split 'seo audit checklist' query).",
+      "assertions": [
+        "Runs with the --demo flag against sample_gsc.json",
+        "Prints competing URLs with clicks, impressions, and position",
+        "Identifies the strongest URL by clicks then impressions then position",
+        "Orders conflicts by severity score descending",
+        "Does not call the NodesHub API"
+      ],
+      "files": [
+        ".claude/skills/nod-cannibalization/scripts/sample_gsc.json"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "I have two pages ranking for 'best running shoes'. Confirm which one actually ranks live and tell me what to do.",
+      "expected_output": "Should detect the conflict from GSC data, run --verify-serp to confirm the live ranking URL (1 token), and recommend consolidating, canonicalizing, or de-optimizing toward the strongest page.",
+      "assertions": [
+        "Triggers on 'two pages ranking for the same query' phrasing",
+        "Uses --verify-serp to confirm the live ranker",
+        "Notes the 1 token per query cost of verification",
+        "Skips gracefully if no NodesHub key is configured",
+        "Recommends a concrete consolidation action toward the strongest URL"
+      ],
+      "files": []
+    }
+  ]
+}

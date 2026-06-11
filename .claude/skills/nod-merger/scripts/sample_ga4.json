@@ -1,0 +1,27 @@
+{
+  "meta": {
+    "propertyId": "492555629",
+    "startDate": "2026-05-14",
+    "endDate": "2026-06-11",
+    "fetchedAt": "2026-06-11T08:05:00.000Z"
+  },
+  "summary": {
+    "totalSessions": 4200,
+    "totalUsers": 3650,
+    "totalPageviews": 9800,
+    "avgBounceRate": "48.2%"
+  },
+  "daily": [],
+  "topPages": [
+    { "page": "/blog/seo-tools", "pageviews": 1320, "users": 1100, "avgSessionDuration": "92.0s" },
+    { "page": "/tools/keyword-research", "pageviews": 980, "users": 820, "avgSessionDuration": "78.5s" },
+    { "page": "/tools/rank-tracker", "pageviews": 540, "users": 470, "avgSessionDuration": "65.0s" },
+    { "page": "/blog/serp-analysis-guide", "pageviews": 310, "users": 280, "avgSessionDuration": "55.0s" },
+    { "page": "/pricing", "pageviews": 420, "users": 390, "avgSessionDuration": "40.0s" },
+    { "page": "/signup", "pageviews": 210, "users": 200, "avgSessionDuration": "30.0s" }
+  ],
+  "trafficSources": [
+    { "channel": "Organic Search", "source": "google", "sessions": 2800, "users": 2400 },
+    { "channel": "Direct", "source": "(direct)", "sessions": 700, "users": 650 }
+  ]
+}

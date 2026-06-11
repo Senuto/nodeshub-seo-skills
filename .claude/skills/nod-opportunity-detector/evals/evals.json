@@ -1,0 +1,48 @@
+{
+  "skill_name": "nod-opportunity-detector",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "What should I fix first on my site? Give me a prioritized SEO action list from the merged data.",
+      "expected_output": "Should load the newest merged dataset from data/merged, run every deterministic rule (striking distance, low CTR vs position, high impressions/zero conversions, decay, cannibalization fold-in), score each 0-100, sort by priority, and save a dated JSON report.",
+      "assertions": [
+        "Triggers on 'what should I fix' / 'action list' / 'prioritize' language",
+        "Loads the newest merged dataset (or instructs to run /nod-merger if none exists)",
+        "Produces opportunities with type, target, evidence, priority (0-100), and recommended_action",
+        "Sorts opportunities by priority descending",
+        "Saves report to data/opportunities/{date}.json",
+        "Reports 0 NodesHub tokens used"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Run the opportunity detector on the demo data and show me the striking-distance and low-CTR quick wins.",
+      "expected_output": "Should run detect.py --demo on sample_merged.json, group output by opportunity type, surface striking-distance items (position 5-15) and low-CTR-vs-position items, and note that the decay rule is skipped because the fixture is a single snapshot.",
+      "assertions": [
+        "Runs with the --demo flag against sample_merged.json",
+        "Flags striking-distance rows with position between 5 and 15 above the impression floor",
+        "Flags rows whose CTR is materially below the expected-CTR-by-position curve",
+        "Skips the decay rule with a note (single snapshot, no prior to compare)",
+        "Orders opportunities by priority descending",
+        "Does not call the NodesHub API"
+      ],
+      "files": [
+        ".claude/skills/nod-opportunity-detector/scripts/sample_merged.json"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "I have GA4 connected. Which pages get traffic but no conversions, and fold in any cannibalization conflicts you find.",
+      "expected_output": "Should flag by_url rows with high impressions/clicks but conversions == 0 (intent/landing mismatch), and fold high/medium conflicts from the latest data/cannibalization/{date}.json report into the opportunity list with their recommendations.",
+      "assertions": [
+        "Flags high-impression URLs with zero GA4 conversions as opportunities",
+        "Skips the conversion rule when GA4 is absent or conversions are not exported",
+        "Folds high and medium cannibalization conflicts in as opportunities when a report exists",
+        "Maps cannibalization severity onto the shared 0-100 priority scale",
+        "Skips the cannibalization fold-in quietly when no report exists"
+      ],
+      "files": []
+    }
+  ]
+}

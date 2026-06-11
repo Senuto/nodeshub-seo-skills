@@ -1,0 +1,113 @@
+{
+  "meta": {
+    "siteUrl": "sc-domain:example.com",
+    "language": "all",
+    "startDate": "2026-05-14",
+    "endDate": "2026-06-11",
+    "fetchedAt": "2026-06-11T09:00:00.000Z"
+  },
+  "summary": {
+    "totalClicks": 1840,
+    "totalImpressions": 52310,
+    "avgCtr": "3.52%",
+    "avgPosition": "12.4"
+  },
+  "queryPages": [
+    {
+      "query": "seo audit checklist",
+      "page": "/blog/seo-audit-checklist",
+      "clicks": 120,
+      "impressions": 2400,
+      "ctr": "5.00%",
+      "position": "6.2"
+    },
+    {
+      "query": "seo audit checklist",
+      "page": "/guides/seo-audit",
+      "clicks": 110,
+      "impressions": 2280,
+      "ctr": "4.82%",
+      "position": "7.1"
+    },
+    {
+      "query": "best keyword research tools",
+      "page": "/blog/keyword-research-tools",
+      "clicks": 95,
+      "impressions": 3100,
+      "ctr": "3.06%",
+      "position": "8.4"
+    },
+    {
+      "query": "best keyword research tools",
+      "page": "/tools/keyword-research",
+      "clicks": 12,
+      "impressions": 1450,
+      "ctr": "0.83%",
+      "position": "11.9"
+    },
+    {
+      "query": "best keyword research tools",
+      "page": "/blog/free-keyword-tools",
+      "clicks": 4,
+      "impressions": 620,
+      "ctr": "0.65%",
+      "position": "14.3"
+    },
+    {
+      "query": "what is technical seo",
+      "page": "/blog/technical-seo-guide",
+      "clicks": 0,
+      "impressions": 880,
+      "ctr": "0.00%",
+      "position": "18.7"
+    },
+    {
+      "query": "what is technical seo",
+      "page": "/glossary/technical-seo",
+      "clicks": 0,
+      "impressions": 910,
+      "ctr": "0.00%",
+      "position": "19.2"
+    },
+    {
+      "query": "rank tracker tool",
+      "page": "/tools/rank-tracker",
+      "clicks": 88,
+      "impressions": 1700,
+      "ctr": "5.18%",
+      "position": "4.3"
+    },
+    {
+      "query": "rank tracker tool",
+      "page": "/blog/how-to-track-rankings",
+      "clicks": 6,
+      "impressions": 140,
+      "ctr": "4.29%",
+      "position": "9.1"
+    },
+    {
+      "query": "content marketing strategy",
+      "page": "/blog/content-marketing-strategy",
+      "clicks": 210,
+      "impressions": 4800,
+      "ctr": "4.38%",
+      "position": "3.1"
+    },
+    {
+      "query": "content marketing strategy",
+      "page": "/about",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": "0.00%",
+      "position": "61.0"
+    },
+    {
+      "query": "serp analysis guide",
+      "page": "/guides/serp-analysis",
+      "clicks": 64,
+      "impressions": 1320,
+      "ctr": "4.85%",
+      "position": "5.0"
+    }
+  ]
+}

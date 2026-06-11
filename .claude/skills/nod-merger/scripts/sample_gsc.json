@@ -1,0 +1,33 @@
+{
+  "meta": {
+    "siteUrl": "sc-domain:example.com",
+    "language": "all",
+    "startDate": "2026-05-14",
+    "endDate": "2026-06-11",
+    "fetchedAt": "2026-06-11T08:00:00.000Z"
+  },
+  "summary": {
+    "totalClicks": 1840,
+    "totalImpressions": 52310,
+    "avgCtr": "3.52%",
+    "avgPosition": "12.4"
+  },
+  "topQueries": [
+    { "query": "seo tools", "clicks": 420, "impressions": 9800, "ctr": "4.29%", "position": "5.1" },
+    { "query": "keyword research", "clicks": 310, "impressions": 7400, "ctr": "4.19%", "position": "6.8" },
+    { "query": "rank tracker", "clicks": 180, "impressions": 5200, "ctr": "3.46%", "position": "9.2" },
+    { "query": "serp analysis", "clicks": 95, "impressions": 3100, "ctr": "3.06%", "position": "11.5" },
+    { "query": "content brief generator", "clicks": 60, "impressions": 2200, "ctr": "2.73%", "position": "14.0" }
+  ],
+  "topPages": [
+    { "page": "/blog/seo-tools", "clicks": 480, "impressions": 11200, "ctr": "4.29%", "position": "5.0" },
+    { "page": "/tools/keyword-research", "clicks": 330, "impressions": 8100, "ctr": "4.07%", "position": "6.5" },
+    { "page": "/tools/rank-tracker", "clicks": 190, "impressions": 5600, "ctr": "3.39%", "position": "9.0" },
+    { "page": "/blog/serp-analysis-guide", "clicks": 100, "impressions": 3300, "ctr": "3.03%", "position": "11.2" },
+    { "page": "/pricing", "clicks": 40, "impressions": 1500, "ctr": "2.67%", "position": "8.0" }
+  ],
+  "queryPages": [
+    { "query": "seo tools", "page": "/blog/seo-tools", "clicks": 420, "impressions": 9800, "ctr": "4.29%", "position": "5.1" },
+    { "query": "keyword research", "page": "/tools/keyword-research", "clicks": 310, "impressions": 7400, "ctr": "4.19%", "position": "6.8" }
+  ]
+}

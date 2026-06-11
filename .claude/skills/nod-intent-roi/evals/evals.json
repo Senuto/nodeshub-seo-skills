@@ -1,0 +1,51 @@
+{
+  "skill_name": "nod-intent-roi",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Which search intent actually converts for us? Prioritize my content by ROI, not traffic.",
+      "expected_output": "Should load the newest merged dataset, resolve each query's intent, attribute URL-level GA4 conversions up to the query's intent bucket, build a per-intent table (clicks, conversions, CvR, ROI per 100 clicks, share of conversions), name the best- and worst-converting intent, and recommend shifting investment toward the best intent. Saves a dated JSON report.",
+      "assertions": [
+        "Triggers on intent ROI / which intent converts / prioritize by ROI language",
+        "Loads the merged dataset from data/merged (via nod-merger's load_merged)",
+        "Buckets queries into informational / commercial / transactional / navigational (plus unknown)",
+        "Attributes conversions at the URL level and rolls them up to the query's intent bucket",
+        "Reports the URL-level attribution caveat (GA4 has no query dimension; approximation)",
+        "Ranks intents by ROI proxy (conversions per 100 clicks) and names best and worst",
+        "Gives a concrete 'shift content investment toward intent X' recommendation",
+        "Saves report to data/intent-roi/{date}.json",
+        "Core analysis uses 0 NodesHub tokens"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Show me ROI by search intent using the demo data.",
+      "expected_output": "Should run analyze.py --demo against the bundled fixture, print the per-intent table, and surface transactional as the best-converting intent and informational as the worst. Runs fully offline with no key or real data.",
+      "assertions": [
+        "Runs with the --demo flag against sample_intent_roi.json",
+        "Renders a per-intent table with clicks, conversions, CvR, ROI per 100 clicks, and share of conversions",
+        "Identifies transactional as the best-converting intent",
+        "Identifies informational as the worst-converting intent",
+        "Counts each landing page's conversions once (no double-counting across queries sharing a URL)",
+        "Does not call the NodesHub API"
+      ],
+      "files": [
+        ".claude/skills/nod-intent-roi/scripts/sample_intent_roi.json"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "My merged data has no intents yet — classify them and then tell me which intent to invest in.",
+      "expected_output": "Should detect that by_query rows lack an intent, use --classify to fill them via the NodesHub intent classifier (2 tokens per keyword), then aggregate and recommend. Without a key it skips classification gracefully, labels those queries 'unknown', and still produces a report.",
+      "assertions": [
+        "Recognizes that intents are missing and uses --classify to fill them",
+        "Notes the 2 tokens per keyword cost of classification",
+        "Skips classification gracefully when no NodesHub key is configured and labels queries 'unknown'",
+        "Still produces and saves a report when classification is skipped",
+        "Recommends shifting investment toward the highest-ROI intent (or states none have conversions yet)"
+      ],
+      "files": []
+    }
+  ]
+}

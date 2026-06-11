@@ -1,0 +1,51 @@
+{
+  "skill_name": "nod-share-of-search",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Show me my brand's share of search versus competitors using the demo data.",
+      "expected_output": "Should run analyze.py --demo against the bundled fixture, print the banner first, render a table of brands with current share %, a text trend arrow (up/down/flat), a share sparkline, and flag your own share direction plus the fastest-rising competitor. Saves a dated JSON report and reports 0 NodesHub tokens.",
+      "assertions": [
+        "Triggers on share of search / brand demand language",
+        "Runs with the --demo flag (you + 3 competitors, 6 months)",
+        "Prints the Share of Search banner as the first action",
+        "Computes share per brand as brand volume / sum of all brands' volume",
+        "Shows a current share %, a trend arrow, and an ASCII sparkline per brand",
+        "Flags your share direction (rising/falling/flat) and the fastest competitor momentum",
+        "Saves report to data/share-of-search/{date}.json",
+        "Reports 0 NodesHub tokens used"
+      ],
+      "files": [
+        ".claude/skills/nod-share-of-search/scripts/analyze.py"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Track Acme's category demand share against Globex and Initech from this brand-volume CSV I exported.",
+      "expected_output": "Should ingest the CSV via --volumes (wide or long layout), compute Share of Search per month for Acme, Globex, and Initech, report the latest share and trend slope per brand, and flag whether Acme's share is rising or falling. No DataForSEO call needed.",
+      "assertions": [
+        "Uses --brand Acme --competitors Globex,Initech with --volumes pointing at the CSV",
+        "Accepts either a wide (brand + month columns) or long (brand,month,volume) CSV layout",
+        "Computes per-month share as brand volume over total category volume",
+        "Reports latest share and a trend (slope) per brand",
+        "Does not require DataForSEO credentials for the CSV path",
+        "Reports 0 NodesHub tokens used"
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Pull live brand search volumes for our category and tell me if we're losing share of search.",
+      "expected_output": "Should attempt the DataForSEO keywords_data/google_ads/search_volume adapter gated behind DATAFORSEO_LOGIN/DATAFORSEO_PASSWORD, summing monthly_searches per brand. If credentials are missing it skips gracefully and guides the user to --volumes or --demo. When data is present it computes share, the trend, and flags your direction plus the fastest competitor.",
+      "assertions": [
+        "Attempts the DataForSEO google_ads/search_volume path when no --volumes is given",
+        "Reads DATAFORSEO_LOGIN / DATAFORSEO_PASSWORD from env or settings.local.json",
+        "Skips gracefully and points to --volumes / --demo when credentials are absent",
+        "Sums monthly_searches per brand across aliases",
+        "Flags whether your share is rising or falling over the available months",
+        "Identifies the competitor with the fastest upward momentum"
+      ],
+      "files": []
+    }
+  ]
+}

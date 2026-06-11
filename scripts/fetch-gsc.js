@@ -14,9 +14,14 @@
  *   knowledge/metrics/gsc-en-2026-02-05.json     # English
  */
 
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { createRequire } from 'module';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const require = createRequire(import.meta.url);
 const { google } = require('googleapis');
-const fs = require('fs');
-const path = require('path');
 
 // Configuration
 const CONFIG = {
@@ -27,7 +32,8 @@ const CONFIG = {
   limits: {
     queries: 5000,
     pages: 2000,
-    daily: 100
+    daily: 100,
+    queryPages: 5000
   },
   languages: ['en']
 };
@@ -148,6 +154,16 @@ async function fetchSearchAnalytics(auth, options, lang = null) {
     }
   });
 
+  // Query x page pairs (needed for cannibalization detection)
+  const queryPagesResponse = await searchconsole.searchanalytics.query({
+    ...baseRequest,
+    requestBody: {
+      ...baseRequest.requestBody,
+      dimensions: ['query', 'page'],
+      rowLimit: CONFIG.limits.queryPages
+    }
+  });
+
   // Summary totals
   const totals = (overallResponse.data.rows || []).reduce((acc, row) => {
     acc.clicks += row.clicks || 0;
@@ -190,6 +206,14 @@ async function fetchSearchAnalytics(auth, options, lang = null) {
     })),
     topPages: (pagesResponse.data.rows || []).map(row => ({
       page: row.keys[0].replace(CONFIG.siteUrl, '/'),
+      clicks: row.clicks,
+      impressions: row.impressions,
+      ctr: ((row.ctr || 0) * 100).toFixed(2) + '%',
+      position: row.position?.toFixed(1)
+    })),
+    queryPages: (queryPagesResponse.data.rows || []).map(row => ({
+      query: row.keys[0],
+      page: row.keys[1].replace(CONFIG.siteUrl, '/'),
       clicks: row.clicks,
       impressions: row.impressions,
       ctr: ((row.ctr || 0) * 100).toFixed(2) + '%',

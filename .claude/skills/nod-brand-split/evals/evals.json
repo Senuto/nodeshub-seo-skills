@@ -1,0 +1,48 @@
+{
+  "skill_name": "nod-brand-split",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "How much of my Search Console traffic is branded vs non-branded? My brand is Acme.",
+      "expected_output": "Should load the newest merger by_query view (or a GSC export), build a brand matcher from 'acme', partition queries into branded and non-branded, report clicks and impressions split with percentages and average position per bucket, and call out non-branded clicks as the acquisition signal. Saves a dated JSON report.",
+      "assertions": [
+        "Triggers on brand vs non-brand / branded traffic language",
+        "Uses --brand to define the brand (e.g. 'acme')",
+        "Splits clicks and impressions into branded vs non-branded with percentages",
+        "Reports average position per bucket",
+        "Highlights non-branded clicks as the acquisition signal",
+        "Saves report to data/brand-split/{date}.json",
+        "Reports 0 NodesHub tokens used"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Run the brand split on the demo data and show me the top non-branded keywords.",
+      "expected_output": "Should run analyze.py --demo against the built-in fixture, print the branded/non-branded split table, and list the top non-branded queries (e.g. 'how to choose a widget', 'best industrial widgets'). The 'akme' misspelling and the acmewidgets.com domain query must land in the branded bucket via the brand regex and domain matching.",
+      "assertions": [
+        "Runs with the --demo flag using the built-in fixture and brand terms",
+        "Counts the 'akme widgets' misspelling as branded via the brand regex",
+        "Counts the acmewidgets.com domain query as branded via substring match",
+        "Lists top non-branded queries sorted by clicks",
+        "Does not call the NodesHub API"
+      ],
+      "files": [
+        ".claude/skills/nod-brand-split/scripts/analyze.py"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Is our non-branded share growing over time? Brand terms are 'acme' and 'acme corp'.",
+      "expected_output": "Should compute the brand split for the newest snapshot and, when two or more dated snapshots exist (data/merged/*.json or gsc-*.json), report the change in non-branded share of clicks between the two newest with a direction reading. With only one snapshot it should state that plainly and not fabricate a trend.",
+      "assertions": [
+        "Triggers on acquisition vs brand / trend phrasing",
+        "Builds the matcher from multiple brand terms",
+        "Compares non-branded share between the two newest snapshots when available",
+        "States there is only one snapshot when a second is missing, without inventing one",
+        "Frames rising non-branded share as the acquisition signal"
+      ],
+      "files": []
+    }
+  ]
+}

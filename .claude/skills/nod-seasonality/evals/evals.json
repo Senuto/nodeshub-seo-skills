@@ -1,0 +1,48 @@
+{
+  "skill_name": "nod-seasonality",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Build a seasonality curve for my site and tell me when demand peaks and when I should publish.",
+      "expected_output": "Should aggregate each keyword's 12 monthly volumes (weighted by annual volume) into one site index (mean month = 100), identify peak and trough months plus the peak/trough ratio, and recommend a publish month before each peak using --lead-weeks. Saves a dated JSON report and reports 0 NodesHub tokens.",
+      "assertions": [
+        "Triggers on seasonality / when-do-keywords-peak / best-time-to-publish language",
+        "Builds a single normalized site curve (12-month index, mean month = 100)",
+        "Identifies peak month(s) and trough month(s) plus the peak/trough ratio",
+        "Produces a publishing calendar with concrete 'publish in X -> pays off in Y' lead-time pairs",
+        "Saves report to data/seasonality/{date}.json",
+        "Reports 0 NodesHub tokens used"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Run the seasonality analyzer on the demo data and show me the off-season topics.",
+      "expected_output": "Should run analyze.py --demo against the built-in summer + counter-seasonal winter fixture, print the 12-month ASCII curve, and surface the winter keywords (snow boots, christmas lights) as counter-seasonal diversification topics that fill the off-season valley.",
+      "assertions": [
+        "Runs with the --demo flag and needs no API key or data file",
+        "Prints a 12-month ASCII bar/heatmap of the site index",
+        "Site peak lands in summer (around Jul) and trough in spring (around Mar)",
+        "Lists counter-seasonal keywords whose peak is opposite the site peak as diversification topics",
+        "Each diversification row shows the keyword's own peak month and annual volume",
+        "Does not call the NodesHub API"
+      ],
+      "files": [
+        ".claude/skills/nod-seasonality/scripts/analyze.py"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "I have a CSV of monthly search volumes for my keywords. Build the demand calendar with a 8-week publishing lead time.",
+      "expected_output": "Should ingest the CSV via --volumes (normalizing month columns like jan/january/m1), build the site curve, and recommend publishing roughly two months before each peak (8 weeks). Falls back to a clear DataForSEO setup message if --source dfs is requested without credentials.",
+      "assertions": [
+        "Reads per-keyword monthly volumes from the CSV via --volumes",
+        "Normalizes month column names (jan / january / m1 / month_1 all accepted)",
+        "Respects --lead-weeks 8 when computing the publish month before each peak",
+        "If DataForSEO is requested without DATAFORSEO_LOGIN/PASSWORD, prints a clear setup message and exits gracefully",
+        "Saves the report to data/seasonality/{date}.json"
+      ],
+      "files": []
+    }
+  ]
+}

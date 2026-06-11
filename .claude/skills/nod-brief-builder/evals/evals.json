@@ -1,0 +1,45 @@
+{
+  "skill_name": "nod-brief-builder",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Here is a keyword list from my client: crm software, best crm, crm pricing, crm for startups, email marketing, email automation, email campaign tools. Turn it into content briefs.",
+      "expected_output": "Should cluster the list (SERP method by default), map every keyword to a target page with a primary and secondary split, and generate one brief per cluster reusing nod-content-brief research.",
+      "assertions": [
+        "Runs the banner as the first action",
+        "Clusters the provided keyword list via nod-serp-clusters",
+        "Maps every input keyword to a cluster / candidate page",
+        "Picks a primary keyword per cluster and treats the rest as secondary",
+        "Generates one brief per cluster reusing nod-content-brief research.py",
+        "Writes mapping.json and brief markdown files under data/briefs/{slug}/",
+        "Prints a readable summary of clusters, mapping, and briefs"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "I have a content-gap export with about 80 keywords. Map them to pages but do not spend tokens on briefs yet — just show me the clusters and the keyword-to-page mapping.",
+      "expected_output": "Should run clustering + mapping only via --dry-run, producing mapping.json and a summary without generating any briefs.",
+      "assertions": [
+        "Recognizes this as a map-keywords-to-pages / content-plan request",
+        "Uses --dry-run so no briefs are generated",
+        "Still clusters and produces the keyword-to-page mapping",
+        "Explains the clustering cost (1 NodesHub token per keyword for SERP method)"
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Show me how brief builder works without using my API keys.",
+      "expected_output": "Should run the --demo mode on the built-in keyword list with mocked clustering and mocked research, clearly labelling the output as mocked.",
+      "assertions": [
+        "Runs build.py with --demo",
+        "Uses the built-in keyword list and mocked clustering + research",
+        "Clearly labels output as mocked / demo (no live API data)",
+        "Still produces mapping.json and brief markdown so the flow is demonstrable",
+        "Does not require NODESHUB_API_KEY or OPENROUTER_API_KEY"
+      ],
+      "files": []
+    }
+  ]
+}

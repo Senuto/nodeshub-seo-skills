@@ -1,0 +1,40 @@
+{
+  "skill_name": "nod-merger",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Merge my GSC and GA4 data into one funnel dataset. Use the demo fixtures.",
+      "expected_output": "Runs merge.py --demo, joins GSC topPages with GA4 topPages on normalized URL and GSC topQueries with Ads metrics, writes data/merged/{date}.json, and prints coverage counts.",
+      "assertions": [
+        "Prints the Data Merger banner as the first action",
+        "Produces a by_url view with impressions, clicks, sessions, conversions fields",
+        "Produces a by_query view with volume, cpc, competition fields",
+        "Writes data/merged/{YYYY-MM-DD}.json with meta, by_url, by_query keys",
+        "Reports GSC+GA4 matched URL count and Ads matched query count"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "I only have Search Console data right now, no GA4 or Ads. Can you still build the unified dataset?",
+      "expected_output": "Merge runs with only GSC present, by_url has GSC fields populated and GA4 fields null, by_query has Ads fields null, and meta.sources_missing lists ga4 and ads.",
+      "assertions": [
+        "Treats each source as optional and runs on GSC alone",
+        "Records missing sources in meta.sources_missing",
+        "Leaves GA4 and Ads fields as null without crashing"
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Combine search console and analytics, and explain why I cannot get per-query conversions.",
+      "expected_output": "Builds the merged dataset and explains the GA4 limitation: GA4 has no query dimension, so conversions are per-URL only and live in by_url, not by_query.",
+      "assertions": [
+        "Triggers on combine search console and analytics phrasing",
+        "States that GA4 has no query dimension",
+        "Explains conversions are attributable per URL, not per query"
+      ],
+      "files": []
+    }
+  ]
+}

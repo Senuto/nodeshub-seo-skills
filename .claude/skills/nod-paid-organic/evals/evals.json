@@ -1,0 +1,49 @@
+{
+  "skill_name": "nod-paid-organic",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Am I paying for keywords I already rank for organically? Here is my Google Ads export.",
+      "expected_output": "Should ingest the paid-keywords CSV, load organic positions from nod-merger by_query, classify each overlapping keyword, and surface wasted-spend candidates (paid terms where organic position <= 3) with an estimated reclaimable spend total. Saves a dated JSON report.",
+      "assertions": [
+        "Triggers on 'paying for keywords i rank for' / wasted ad spend language",
+        "Ingests the paid CSV and normalizes/alias-matches cost, clicks, conversions columns",
+        "Loads organic positions from nod-merger's by_query (or instructs to run merge.py if missing)",
+        "Flags wasted spend candidates where paid cost AND organic position <= 3",
+        "Reports total spend and estimated reclaimable spend",
+        "Notes that reclaimable spend is an estimate",
+        "Saves report to data/paid-organic/{date}.json",
+        "Reports 0 NodesHub tokens for the core analysis"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Run the paid vs organic analysis on the demo data and show me where I'm wasting budget.",
+      "expected_output": "Should run analyze.py --demo against sample_paid.csv plus the inline organic fixture, print the three classified tables, and surface the wasted-spend candidates ('seo tools', 'keyword research', 'content brief generator') ordered by spend.",
+      "assertions": [
+        "Runs with the --demo flag (no real data needed)",
+        "Classifies keywords into wasted / justified / defend buckets",
+        "Orders wasted-spend candidates by cost descending",
+        "Prints total spend and estimated reclaimable spend",
+        "Does not call the NodesHub API"
+      ],
+      "files": [
+        ".claude/skills/nod-paid-organic/scripts/sample_paid.csv"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "For the keywords where I rank organically, check if competitors are running ads against me so I know what to defend.",
+      "expected_output": "Should classify paid keywords, then use --check-serp-ads to query the live SERP for organic-ranking terms and annotate how many competitor ads appear, flagging a defend signal. Skips gracefully without a NodesHub key.",
+      "assertions": [
+        "Triggers on ads-cannibalization / defend language",
+        "Uses --check-serp-ads on organic-ranking (wasted + defend) terms",
+        "Notes the 1 token per term cost",
+        "Skips gracefully if no NodesHub key is configured",
+        "Adds competitor ad counts and a defend recommendation to affected rows"
+      ],
+      "files": []
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "skill_name": "nod-aio",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Am I cited in the AI Overview for my keywords? Run it on the demo data for example.com.",
+      "expected_output": "Should run analyze.py --demo --domain example.com, report the AIO presence rate and the citation rate, and split the keywords into the four classes (Cited, AIO opportunity, AIO gap, No AIO). Saves a dated JSON report.",
+      "assertions": [
+        "Triggers on 'cited in AI Overview' / AIO visibility language",
+        "Runs with --demo and --domain against the bundled fixture",
+        "Reports AIO presence rate across the keyword set",
+        "Reports your citation rate of the AIO queries",
+        "Classifies each keyword as Cited, AIO opportunity, AIO gap, or No AIO",
+        "Lists top cited competitor domains",
+        "Saves report to data/aio/{date}.json",
+        "Reports 0 NodesHub tokens used"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "For the queries where I rank but the AI Overview doesn't cite me, how should I structure the content?",
+      "expected_output": "Should surface the AIO-opportunity keywords (AIO present, ranks top 10, not cited) and print the fixed brief-under-AIO checklist (concise definition, direct-answer paragraph, lists/tables, FAQ, self-contained claims).",
+      "assertions": [
+        "Identifies the AIO opportunity class as the closest win",
+        "Outputs the fixed brief-under-AIO structural checklist",
+        "Checklist is a fixed template, not generated prose",
+        "Checklist includes a concise definition, a direct-answer paragraph, lists/tables, and an FAQ block",
+        "Does not call the NodesHub API or an LLM for the classification"
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Check AI Overview visibility for example.com on these keywords from a CSV I prepared, using GEO/AEO terms.",
+      "expected_output": "Should read per-keyword AIO data from the --serp CSV/JSON (keyword, aio_present, cited_domains, organic_domains), classify each keyword against the domain, and aggregate presence and citation rates without DataForSEO if a file is provided.",
+      "assertions": [
+        "Triggers on GEO / AEO / AI search visibility phrasing",
+        "Reads per-keyword AIO data from --serp CSV/JSON when provided",
+        "Falls back to DataForSEO (--source dfs) only when no file is given",
+        "Skips gracefully with a setup message if DataForSEO credentials are absent",
+        "Aggregates AIO presence rate and citation rate deterministically"
+      ],
+      "files": []
+    }
+  ]
+}

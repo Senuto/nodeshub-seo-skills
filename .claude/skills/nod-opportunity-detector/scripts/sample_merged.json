@@ -1,0 +1,186 @@
+{
+  "meta": {
+    "generatedAt": "2026-06-11",
+    "sources_present": ["gsc", "ga4", "ads"],
+    "sources_missing": [],
+    "source_files": {
+      "gsc": "sample_gsc.json",
+      "ga4": "sample_ga4.json",
+      "ads": "sample_ads.csv"
+    },
+    "coverage": {
+      "by_url_rows": 6,
+      "by_url_gsc_ga4_matched": 5,
+      "by_query_rows": 6,
+      "by_query_ads_matched": 5
+    },
+    "serp_enriched": false,
+    "note": "Demo fixture for nod-opportunity-detector. GA4 conversions are per-URL only."
+  },
+  "by_url": [
+    {
+      "url": "/blog/seo-tools",
+      "in_gsc": true,
+      "in_ga4": true,
+      "impressions": 11200,
+      "clicks": 480,
+      "ctr": 4.29,
+      "position": 7.4,
+      "sessions": 1100,
+      "pageviews": 1320,
+      "users": 1100,
+      "conversions": 0,
+      "engagement_rate": 0.61,
+      "avg_session_duration": "92.0s"
+    },
+    {
+      "url": "/tools/keyword-research",
+      "in_gsc": true,
+      "in_ga4": true,
+      "impressions": 8100,
+      "clicks": 90,
+      "ctr": 1.11,
+      "position": 3.1,
+      "sessions": 820,
+      "pageviews": 980,
+      "users": 820,
+      "conversions": 14,
+      "engagement_rate": 0.58,
+      "avg_session_duration": "78.5s"
+    },
+    {
+      "url": "/blog/link-building-guide",
+      "in_gsc": true,
+      "in_ga4": true,
+      "impressions": 5400,
+      "clicks": 60,
+      "ctr": 1.11,
+      "position": 6.2,
+      "sessions": 540,
+      "pageviews": 600,
+      "users": 540,
+      "conversions": 0,
+      "engagement_rate": 0.44,
+      "avg_session_duration": "55.0s"
+    },
+    {
+      "url": "/pricing",
+      "in_gsc": true,
+      "in_ga4": true,
+      "impressions": 2200,
+      "clicks": 410,
+      "ctr": 18.6,
+      "position": 1.4,
+      "sessions": 460,
+      "pageviews": 520,
+      "users": 460,
+      "conversions": 38,
+      "engagement_rate": 0.71,
+      "avg_session_duration": "63.0s"
+    },
+    {
+      "url": "/blog/technical-seo-checklist",
+      "in_gsc": true,
+      "in_ga4": true,
+      "impressions": 3300,
+      "clicks": 120,
+      "ctr": 3.63,
+      "position": 11.8,
+      "sessions": 300,
+      "pageviews": 360,
+      "users": 300,
+      "conversions": 3,
+      "engagement_rate": 0.49,
+      "avg_session_duration": "70.0s"
+    },
+    {
+      "url": "/blog/orphan-old-post",
+      "in_gsc": false,
+      "in_ga4": true,
+      "impressions": null,
+      "clicks": null,
+      "ctr": null,
+      "position": null,
+      "sessions": 12,
+      "pageviews": 14,
+      "users": 12,
+      "conversions": 0,
+      "engagement_rate": 0.2,
+      "avg_session_duration": "20.0s"
+    }
+  ],
+  "by_query": [
+    {
+      "query": "seo tools",
+      "in_gsc": true,
+      "in_ads": true,
+      "clicks": 480,
+      "impressions": 11200,
+      "ctr": 4.29,
+      "position": 7.4,
+      "volume": 40500,
+      "cpc": 3.45,
+      "competition": 0.8
+    },
+    {
+      "query": "keyword research tool",
+      "in_gsc": true,
+      "in_ads": true,
+      "clicks": 90,
+      "impressions": 8100,
+      "ctr": 1.11,
+      "position": 3.1,
+      "volume": 18100,
+      "cpc": 4.1,
+      "competition": 0.8
+    },
+    {
+      "query": "link building guide",
+      "in_gsc": true,
+      "in_ads": true,
+      "clicks": 60,
+      "impressions": 5400,
+      "ctr": 1.11,
+      "position": 6.2,
+      "volume": 6600,
+      "cpc": 2.9,
+      "competition": 0.6
+    },
+    {
+      "query": "technical seo checklist",
+      "in_gsc": true,
+      "in_ads": true,
+      "clicks": 120,
+      "impressions": 3300,
+      "ctr": 3.63,
+      "position": 11.8,
+      "volume": 4400,
+      "cpc": 2.1,
+      "competition": 0.5
+    },
+    {
+      "query": "what is seo",
+      "in_gsc": true,
+      "in_ads": true,
+      "clicks": 30,
+      "impressions": 9000,
+      "ctr": 0.33,
+      "position": 9.5,
+      "volume": 33100,
+      "cpc": 1.2,
+      "competition": 0.3
+    },
+    {
+      "query": "seo audit niche term",
+      "in_gsc": true,
+      "in_ads": false,
+      "clicks": 1,
+      "impressions": 28,
+      "ctr": 3.57,
+      "position": 8.0,
+      "volume": null,
+      "cpc": null,
+      "competition": null
+    }
+  ]
+}
