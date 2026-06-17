@@ -24,6 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Hardcoded `data/` paths in agents and `nod-nodeshub-api/scripts/report.py` updated to `output/data/`.
+- `bin/install.mjs` now adds `output/` to the user project's `.gitignore` so SERP cache, snapshots, reports, and other runtime artifacts are not accidentally committed (replaces the now-stale `data/gsc/*.json` entry).
+- `nod-competitor-tracker` no longer crashes when a SERP organic result lacks a position (`r.get("pos", r.get("global_pos"))` returns `None`). `None` positions are excluded from the average; domains with zero positions render as `—`.
+- `nod-rank-tracker`, `nod-competitor-tracker`, `nod-visibility-monitor`, and `nod-paa-miner` now catch any worker exception (network timeout, connection error, malformed response), not just `NodeshubError`. Previously a non-NodesHub exception would either crash the whole run or leave a missing key in `serp_results` causing a downstream `KeyError` in visibility-monitor.
 
 ## [0.1.0] - 2026-04-13
 

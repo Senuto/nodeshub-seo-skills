@@ -170,9 +170,9 @@ def main():
                     serp_results[kw] = organic
                     tag = "[cache]" if from_cache else "[api]"
                     print(f"  [{n}/{len(keywords)}] {kw}... {tag}")
-                except NodeshubError as e:
+                except Exception as e:
                     serp_results[kw] = []
-                    print(f"  [{n}/{len(keywords)}] {kw}... FAILED ({e})")
+                    print(f"  [{n}/{len(keywords)}] {kw}... FAILED ({type(e).__name__}: {e})")
 
         for kw in keywords:
             organic = serp_results[kw]

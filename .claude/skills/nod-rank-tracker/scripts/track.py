@@ -185,11 +185,11 @@ def main():
                     else:
                         results[kw] = {"position": None, "url": None, "title": None}
                         print(f"  [{n}/{len(keywords)}] {kw}... not in top 10 {tag}")
-                except NodeshubError as e:
+                except Exception as e:
                     with lock:
                         failed.append(kw)
                     results[kw] = {"position": None, "url": None, "title": None, "error": str(e)}
-                    print(f"  [{n}/{len(keywords)}] {kw}... FAILED ({e})")
+                    print(f"  [{n}/{len(keywords)}] {kw}... FAILED ({type(e).__name__}: {e})")
 
         # Save snapshot
         data_dir = _PROJECT_ROOT / "output" / "data" / "rank-history" / args.domain.lower().replace("www.", "")

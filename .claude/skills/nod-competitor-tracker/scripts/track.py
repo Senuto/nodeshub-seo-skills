@@ -58,17 +58,19 @@ def render_report_section(data):
     ]))
 
     # Domain frequency table (top 15)
+    def _avg_pos(stats):
+        ps = [p for p in stats.get("positions", []) if p is not None]
+        return sum(ps) / len(ps) if ps else float("inf")
     sorted_domains = sorted(domain_stats.items(),
-        key=lambda x: (-len(x[1].get("keywords", [])),
-                        sum(x[1].get("positions", [])) / max(len(x[1].get("positions", [1])), 1)))
+        key=lambda x: (-len(x[1].get("keywords", [])), _avg_pos(x[1])))
     rows = []
     for domain, stats in sorted_domains[:15]:
         kw_count = len(stats.get("keywords", []))
-        positions = stats.get("positions", [])
+        positions = [p for p in stats.get("positions", []) if p is not None]
         avg_pos = sum(positions) / len(positions) if positions else 0
         marker = " **" if domain in watched else ""
-        rows.append([e(domain) + marker, f"{kw_count}/{len(keyword_results)}",
-                     f"{avg_pos:.1f}"])
+        avg_str = f"{avg_pos:.1f}" if positions else "—"
+        rows.append([e(domain) + marker, f"{kw_count}/{len(keyword_results)}", avg_str])
     if rows:
         parts.append("<h3>Domain Frequency (Top 15)</h3>")
         parts.append(html_table(["Domain", "Keywords in Top 10", "Avg Position"], rows))
@@ -160,14 +162,15 @@ def main():
                     keyword_results[kw] = {"top_10": top_10}
                     tag = "[cache]" if from_cache else "[api]"
                     print(f"  [{n}/{len(keywords)}] {kw}... {tag}")
-                except NodeshubError as e:
+                except Exception as e:
                     keyword_results[kw] = {"top_10": []}
-                    print(f"  [{n}/{len(keywords)}] {kw}... FAILED ({e})")
+                    print(f"  [{n}/{len(keywords)}] {kw}... FAILED ({type(e).__name__}: {e})")
 
         for kw, kw_data in keyword_results.items():
             for entry in kw_data["top_10"]:
                 domain_stats[entry["domain"]]["keywords"].append(kw)
-                domain_stats[entry["domain"]]["positions"].append(entry["position"])
+                if entry["position"] is not None:
+                    domain_stats[entry["domain"]]["positions"].append(entry["position"])
 
         # Save snapshot
         data_dir = _PROJECT_ROOT / "output" / "data" / "competitor-tracking"
@@ -205,9 +208,10 @@ def main():
         print("|--------|-------------------|--------------|")
         for domain, stats in sorted_domains[:15]:
             count = len(stats["keywords"])
-            avg_pos = sum(stats["positions"]) / len(stats["positions"])
+            avg_pos = sum(stats["positions"]) / len(stats["positions"]) if stats["positions"] else 0
             marker = " **" if domain in watched else ""
-            print(f"| {domain}{marker} | {count}/{len(keywords)} | {avg_pos:.1f} |")
+            avg_str = f"{avg_pos:.1f}" if stats["positions"] else "—"
+            print(f"| {domain}{marker} | {count}/{len(keywords)} | {avg_str} |")
         print()
 
         # Keyword × Domain matrix for watched domains

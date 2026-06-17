@@ -227,9 +227,9 @@ def main():
                     questions_by_keyword[kw] = paa
                     tag = "[cache]" if from_cache else "[api]"
                     print(f"  [{n}/{len(keywords)}] {kw}... {len(paa)} questions {tag}")
-                except NodeshubError as e:
+                except Exception as e:
                     questions_by_keyword[kw] = []
-                    print(f"  [{n}/{len(keywords)}] {kw}... FAILED ({e})")
+                    print(f"  [{n}/{len(keywords)}] {kw}... FAILED ({type(e).__name__}: {e})")
 
         total_raw = sum(len(v) for v in questions_by_keyword.values())
 

@@ -294,7 +294,7 @@ const gitignoreEntries = [
   'CLAUDE.local.md',
   'settings.local.json',
   '.claude/settings.local.json',
-  'data/gsc/*.json',
+  'output/',
   '__pycache__/',
   '*.pyc',
 ];
