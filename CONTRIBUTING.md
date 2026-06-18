@@ -1,82 +1,17 @@
 # Contributing
 
-We accept pull requests! Whether it's a new skill, a bug fix, or a docs improvement — contributions from the community are welcome. You don't need any special access: the repo is public, so anyone can fork it and open a PR.
+## How contributions work right now
 
-## How to submit a pull request
-
-### 1. Fork the repository
-
-Click **Fork** on [github.com/Senuto/nodeshub-seo-skills](https://github.com/Senuto/nodeshub-seo-skills), or use the GitHub CLI:
-
-```bash
-gh repo fork Senuto/nodeshub-seo-skills --clone
-cd nodeshub-seo-skills
-```
-
-### 2. Create a branch
-
-```bash
-git checkout -b my-change
-```
-
-Use a short, descriptive branch name (e.g. `add-serp-volatility-skill`, `fix-sync-script-encoding`).
-
-### 3. Make your changes
-
-- **New skill?** Follow [Creating your own skills](#creating-your-own-skills) below — the same structure applies whether you keep a skill local or contribute it back.
-- **Bug fix or docs?** Keep the change focused — one fix per PR.
-
-### 4. Validate
-
-```bash
-bash validate-skills.sh
-```
-
-Checks: frontmatter validity, name matches directory, naming conventions, description length, required files. PRs that fail validation won't be merged.
-
-### 5. Commit and push
-
-```bash
-git add -A
-git commit -m "Add nod-my-skill: short description of what it does"
-git push -u origin my-change
-```
-
-### 6. Open the pull request
-
-```bash
-gh pr create --repo Senuto/nodeshub-seo-skills --title "Add nod-my-skill" --body "What it does and why"
-```
-
-Or open it from the GitHub web UI — after pushing, GitHub shows a "Compare & pull request" button on your fork.
-
-In the PR description, include:
-- **What** the change does
-- **Why** it's useful (example use case)
-- For new skills: a sample prompt + the output it produced when you tested it
-
-### What makes a PR easy to merge
-
-- One skill / one fix per PR — small PRs get reviewed faster
-- `bash validate-skills.sh` passes
-- New skills include `evals/evals.json` with at least one eval
-- New `nod-` skills are registered via `sync_skills.py`; generic skills are added to `CLAUDE.md` and `.claude-plugin/marketplace.json`
-- You actually ran the skill and it works
-
-### Review process
-
-A maintainer will review your PR, possibly request changes, and merge it. We aim to respond within a few days. If a PR goes quiet, feel free to ping us in the [SEO Testers Discord](https://discord.gg/VhB7FFfndJ).
-
----
-
-## Other ways to contribute
+This project is in **early development**. We're not accepting pull requests yet — but we'd love to hear your ideas.
 
 ### Suggest a skill or improvement
 
-Not ready to write code? [Open an issue](https://github.com/Senuto/nodeshub-seo-skills/issues/new) with:
+[Open an issue](https://github.com/Senuto/nodeshub-seo-skills/issues/new) with:
 - What the skill should do
 - Example use case (e.g. "I want to check if my competitors use AI content")
 - Which existing skills it could build on
+
+We review suggestions and may include them in future releases.
 
 ### Report a bug
 
@@ -88,9 +23,9 @@ Not ready to write code? [Open an issue](https://github.com/Senuto/nodeshub-seo-
 
 ---
 
-## Creating your own skills
+## Creating your own skills locally
 
-You can extend this toolkit with custom skills — keep them local to your project, or contribute them back via PR (see above). Everything you create works immediately.
+You can extend this toolkit with custom skills in your own project — no PR needed. Everything you create stays local and works immediately.
 
 ### The fast way: `/skill-creator`
 
@@ -219,3 +154,7 @@ bash validate-skills.sh
 ```
 
 Checks: frontmatter validity, name matches directory, naming conventions, description length, required files.
+
+---
+
+*When we open up for pull requests, we'll add code style and commit guidelines here.*
