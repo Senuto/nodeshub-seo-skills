@@ -46,7 +46,7 @@ python3 .claude/skills/nod-nodeshub-api/scripts/check_setup.py
 1. **Get keywords and competitor domains** from user
 2. **Check token balance** — each keyword = 1 token
 3. **Run tracker** — fetches SERP for each keyword, extracts all domains in top 10
-4. **Save snapshot** to `data/competitor-tracking/{YYYY-MM-DD}.json`
+4. **Save snapshot** to `output/data/competitor-tracking/{YYYY-MM-DD}.json`
 5. **Compare with previous** if `--compare` flag
 6. **Report results** — domain frequency, positions, changes
 
@@ -77,7 +77,7 @@ python3 .claude/skills/nod-nodeshub-api/scripts/check_setup.py
 
 ## Data Storage
 
-Snapshots saved to: `data/competitor-tracking/{YYYY-MM-DD}.json`
+Snapshots saved to: `output/data/competitor-tracking/{YYYY-MM-DD}.json`
 
 ```json
 {
@@ -127,7 +127,16 @@ After collecting data, ask the user:
 > 2. **Existing report** — appends a section to a chosen report
 > 3. **Skip** — no report
 
-Use `render_report_section(data)` from `track.py`, then `create_report()` or `append_section()` from `report.py`.
+Use `render_report_section(data)` from `track.py`, then `create_report()` or `append_section()` from `report.py`:
+```python
+from report import create_report, append_section
+section_html = render_report_section(data)
+# New report:
+path = create_report("Competitor Tracker", sections=[section_html])
+# Append to existing report:
+path = append_section("output/reports/existing-report.html", section_html)
+```
+Signatures: `create_report(title, sections=None, extra_head="")` and `append_section(report_path, section_html, extra_head="")`.
 
 ## Related Skills
 

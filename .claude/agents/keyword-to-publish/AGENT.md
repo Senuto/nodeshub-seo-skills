@@ -30,7 +30,7 @@ You are a sub-agent that takes a seed keyword and produces a publish-ready artic
 1. What is the seed keyword / topic?
 2. Target market? (gl/hl, default: pl/pl)
 3. Target language for the article?
-4. Where to save results? (default: `data/articles/[slug]/`)
+4. Where to save results? (default: `output/data/articles/[slug]/`)
 5. Any specific angle, audience, or constraints?
 6. Max acceptable AI score? (default: 30%)
 
@@ -68,7 +68,7 @@ print(json.loads(urllib.request.urlopen(req, timeout=10).read()))
 python3 .claude/skills/nod-keyword-research/scripts/iterative_research.py "[KEYWORD]" \
   --gl [GL] --hl [HL] \
   --loops 2 --serp-per-loop 3 --expand-popular 2 \
-  --output data/articles/[SLUG]/01_keywords.csv --json
+  --output output/data/articles/[SLUG]/01_keywords.csv --json
 ```
 
 **Report:**
@@ -105,7 +105,7 @@ Use data from Steps 1 and 2 to generate a data-driven brief:
 ```bash
 python3 .claude/skills/nod-content-brief/scripts/generate_brief.py "[KEYWORD]" \
   --gl [GL] --hl [HL] \
-  --output data/articles/[SLUG]/03_brief.md
+  --output output/data/articles/[SLUG]/03_brief.md
 ```
 
 **Report:**
@@ -116,7 +116,7 @@ python3 .claude/skills/nod-content-brief/scripts/generate_brief.py "[KEYWORD]" \
 - Recommended word count
 - Content angle based on gaps
 
-**Save brief** to `data/articles/[SLUG]/03_brief.md`.
+**Save brief** to `output/data/articles/[SLUG]/03_brief.md`.
 
 **Ask:** "Here's the content brief. Should I write the article based on this? Any adjustments?"
 
@@ -134,7 +134,7 @@ python3 .claude/skills/nod-content-brief/scripts/generate_brief.py "[KEYWORD]" \
 7. Apply product context from `docs/` if available (voice, tone, audiences)
 8. **Write naturally** — vary sentence length, use transitions, avoid AI patterns
 
-**Save article** to `data/articles/[SLUG]/04_article.md`.
+**Save article** to `output/data/articles/[SLUG]/04_article.md`.
 
 **Show the user:** Title, word count, keyword coverage summary.
 
@@ -146,7 +146,7 @@ python3 .claude/skills/nod-content-brief/scripts/generate_brief.py "[KEYWORD]" \
 
 ```bash
 python3 .claude/skills/ai-score/scripts/analyze.py \
-  --file data/articles/[SLUG]/04_article.md \
+  --file output/data/articles/[SLUG]/04_article.md \
   --guidelines --humanize --json
 ```
 
@@ -162,7 +162,7 @@ python3 .claude/skills/ai-score/scripts/analyze.py \
 - Re-check with Genuino
 - Repeat until score < threshold or 3 iterations max
 
-**Save final version** to `data/articles/[SLUG]/05_article_final.md`.
+**Save final version** to `output/data/articles/[SLUG]/05_article_final.md`.
 
 **Ask:** "AI score is [X]% (target: [Y]%). Proceeding to final audit?"
 
@@ -174,7 +174,7 @@ Audit the final article against current SERP competition:
 
 ```bash
 python3 .claude/skills/nod-content-auditor/scripts/audit.py \
-  --file data/articles/[SLUG]/05_article_final.md \
+  --file output/data/articles/[SLUG]/05_article_final.md \
   --keyword "[KEYWORD]" \
   --gl [GL] --hl [HL]
 ```
@@ -205,7 +205,7 @@ Pipeline:
   6. Audit:        [N]% keyword coverage, [gaps] gaps
 
 Files:
-  data/articles/[slug]/
+  output/data/articles/[slug]/
   ├── 01_keywords.csv
   ├── 02_serp_analysis.json
   ├── 03_brief.md
@@ -217,7 +217,7 @@ Total cost: ~[N] NodesHub tokens + [N] Genuino credits
 
 ## Resumability
 
-Each step saves to `data/articles/[slug]/`. If user returns later:
+Each step saves to `output/data/articles/[slug]/`. If user returns later:
 - Check which files exist
 - Offer to resume from the next incomplete step
 - Previously generated data is reused

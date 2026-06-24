@@ -8,7 +8,7 @@
       "assertions": [
         "Fetches SERP data for all keywords",
         "Finds senuto.com position in each SERP",
-        "Saves snapshot to data/rank-history/",
+        "Saves snapshot to output/data/rank-history/",
         "Shows position changes if previous snapshot exists",
         "Displays results in a table format"
       ],

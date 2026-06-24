@@ -46,7 +46,7 @@ python3 .claude/skills/nod-nodeshub-api/scripts/check_setup.py
 1. **Get domain and keywords** from user
 2. **Check token balance** — each keyword = 1 token
 3. **Run tracker** — fetches SERP for each keyword, finds domain position
-4. **Save snapshot** to `data/rank-history/{domain}/{YYYY-MM-DD}.json`
+4. **Save snapshot** to `output/data/rank-history/{domain}/{YYYY-MM-DD}.json`
 5. **Compare with previous** if `--compare` flag or previous data exists
 6. **Report results** — positions, changes, not-ranking keywords
 
@@ -73,7 +73,7 @@ python3 .claude/skills/nod-nodeshub-api/scripts/check_setup.py
 
 ## Data Storage
 
-Snapshots saved to: `data/rank-history/{domain}/{YYYY-MM-DD}.json`
+Snapshots saved to: `output/data/rank-history/{domain}/{YYYY-MM-DD}.json`
 
 ```json
 {
@@ -120,8 +120,12 @@ then `create_report()` or `append_section()` from `report.py`:
 ```python
 from report import create_report, append_section
 section_html = render_report_section(snapshot, previous)
+# New report:
 path = create_report("Rank Tracker", sections=[section_html])
+# Append to existing report:
+path = append_section("output/reports/existing-report.html", section_html)
 ```
+Signatures: `create_report(title, sections=None, extra_head="")` and `append_section(report_path, section_html, extra_head="")`.
 
 ## Related Skills
 

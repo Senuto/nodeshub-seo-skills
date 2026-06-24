@@ -9,14 +9,19 @@ Usage:
 
 import argparse
 import json
-import os
 import sys
+import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'nod-nodeshub-api' / 'scripts'))
 from client import NodeshubClient, NodeshubError
-from report import render_section_wrapper, make_section_id, html_table, summary_card, bar_chart, badge
+from report import render_section_wrapper, make_section_id, html_table, summary_card, bar_chart, badge, find_repo_root
+import serp_cache
+
+_PROJECT_ROOT = find_repo_root()
+MAX_WORKERS = 5
 
 
 def find_domain_position(organic_results, domain):
@@ -131,7 +136,7 @@ def main():
     parser.add_argument("--gl", default="us", help="Country code (default: us)")
     parser.add_argument("--hl", default="en", help="Language code (default: en)")
     parser.add_argument("--compare", action="store_true", help="Compare with previous snapshot")
-    parser.add_argument("--raw", action="store_true", help="Output raw JSON")
+    parser.add_argument("--raw", action="store_true", help="Output raw JSON to stdout (also saves snapshot to disk)")
     args = parser.parse_args()
 
     # Collect keywords
@@ -148,8 +153,6 @@ def main():
         print("Error: No keywords provided. Use positional args or --file.", file=sys.stderr)
         sys.exit(1)
 
-
-
     print(f"Tracking {len(keywords)} keywords for {args.domain} (cost: {len(keywords)} tokens)")
 
     try:
@@ -157,27 +160,39 @@ def main():
         results = {}
 
         failed = []
-        for i, kw in enumerate(keywords, 1):
-            print(f"  [{i}/{len(keywords)}] {kw}...", end=" ", flush=True)
-            try:
-                serp = client.search(kw, gl=args.gl, hl=args.hl)
-                data = serp.get("data", {})
-                organic = data.get("results", {}).get("organic_results", [])
-                match = find_domain_position(organic, args.domain)
+        lock = threading.Lock()
+        counter = [0]
 
-                if match:
-                    results[kw] = match
-                    print(f"#{match['position']}")
-                else:
-                    results[kw] = {"position": None, "url": None, "title": None}
-                    print("not in top 10")
-            except NodeshubError as e:
-                failed.append(kw)
-                results[kw] = {"position": None, "url": None, "title": None, "error": str(e)}
-                print(f"FAILED ({e})")
+        def _fetch(kw):
+            serp, from_cache = serp_cache.search_cached(client, kw, args.gl, args.hl)
+            data = serp.get("data", {})
+            organic = data.get("results", {}).get("organic_results", [])
+            return find_domain_position(organic, args.domain), from_cache
+
+        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+            futures = {executor.submit(_fetch, kw): kw for kw in keywords}
+            for future in as_completed(futures):
+                kw = futures[future]
+                with lock:
+                    counter[0] += 1
+                    n = counter[0]
+                try:
+                    match, from_cache = future.result()
+                    tag = "[cache]" if from_cache else "[api]"
+                    if match:
+                        results[kw] = match
+                        print(f"  [{n}/{len(keywords)}] {kw}... #{match['position']} {tag}")
+                    else:
+                        results[kw] = {"position": None, "url": None, "title": None}
+                        print(f"  [{n}/{len(keywords)}] {kw}... not in top 10 {tag}")
+                except Exception as e:
+                    with lock:
+                        failed.append(kw)
+                    results[kw] = {"position": None, "url": None, "title": None, "error": str(e)}
+                    print(f"  [{n}/{len(keywords)}] {kw}... FAILED ({type(e).__name__}: {e})")
 
         # Save snapshot
-        data_dir = Path("data/rank-history") / args.domain.replace("www.", "")
+        data_dir = _PROJECT_ROOT / "output" / "data" / "rank-history" / args.domain.lower().replace("www.", "")
         data_dir.mkdir(parents=True, exist_ok=True)
         snapshot = {
             "domain": args.domain,

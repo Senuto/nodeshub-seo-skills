@@ -28,7 +28,7 @@ from branding import load_brand, brand_css, render_header, render_footer
 
 # ── Paths ─────────────────────────────────────────────────────────
 
-def _find_repo_root() -> Path:
+def find_repo_root() -> Path:
     """Walk up from CWD to find the repo root (has .git or CLAUDE.md)."""
     current = Path.cwd()
     for _ in range(8):
@@ -43,7 +43,7 @@ def _find_repo_root() -> Path:
 
 def _reports_dir() -> Path:
     """Return the reports/ directory, creating it if needed."""
-    d = _find_repo_root() / "reports"
+    d = find_repo_root() / "output" / "reports"
     d.mkdir(parents=True, exist_ok=True)
     return d
 

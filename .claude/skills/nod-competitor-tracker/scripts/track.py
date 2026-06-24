@@ -9,15 +9,20 @@ Usage:
 
 import argparse
 import json
-import os
 import sys
+import threading
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'nod-nodeshub-api' / 'scripts'))
 from client import NodeshubClient, NodeshubError
-from report import render_section_wrapper, make_section_id, html_table, summary_card, bar_chart, badge
+from report import render_section_wrapper, make_section_id, html_table, summary_card, bar_chart, badge, find_repo_root
+import serp_cache
+
+_PROJECT_ROOT = find_repo_root()
+MAX_WORKERS = 5
 
 
 def load_previous_snapshot(data_dir):
@@ -42,7 +47,7 @@ def render_report_section(data):
     """
     from html import escape as e
     parts = []
-    keyword_results = data.get("keyword_results", {})
+    keyword_results = data.get("keywords", data.get("keyword_results", {}))
     domain_stats = data.get("domain_stats", {})
     watched = data.get("watched_domains", [])
 
@@ -53,17 +58,19 @@ def render_report_section(data):
     ]))
 
     # Domain frequency table (top 15)
+    def _avg_pos(stats):
+        ps = [p for p in stats.get("positions", []) if p is not None]
+        return sum(ps) / len(ps) if ps else float("inf")
     sorted_domains = sorted(domain_stats.items(),
-        key=lambda x: (-len(x[1].get("keywords", [])),
-                        sum(x[1].get("positions", [])) / max(len(x[1].get("positions", [1])), 1)))
+        key=lambda x: (-len(x[1].get("keywords", [])), _avg_pos(x[1])))
     rows = []
     for domain, stats in sorted_domains[:15]:
         kw_count = len(stats.get("keywords", []))
-        positions = stats.get("positions", [])
+        positions = [p for p in stats.get("positions", []) if p is not None]
         avg_pos = sum(positions) / len(positions) if positions else 0
         marker = " **" if domain in watched else ""
-        rows.append([e(domain) + marker, f"{kw_count}/{len(keyword_results)}",
-                     f"{avg_pos:.1f}"])
+        avg_str = f"{avg_pos:.1f}" if positions else "—"
+        rows.append([e(domain) + marker, f"{kw_count}/{len(keyword_results)}", avg_str])
     if rows:
         parts.append("<h3>Domain Frequency (Top 15)</h3>")
         parts.append(html_table(["Domain", "Keywords in Top 10", "Avg Position"], rows))
@@ -99,7 +106,7 @@ def main():
     parser.add_argument("--hl", default="en", help="Language code (default: en)")
     parser.add_argument("--watch", help="Comma-separated domains to highlight")
     parser.add_argument("--compare", action="store_true", help="Compare with previous snapshot")
-    parser.add_argument("--raw", action="store_true", help="Output raw JSON")
+    parser.add_argument("--raw", action="store_true", help="Output raw JSON to stdout (also saves snapshot to disk)")
     args = parser.parse_args()
 
     # Collect keywords
@@ -118,8 +125,6 @@ def main():
 
     watched = [d.strip().lower().replace("www.", "") for d in args.watch.split(",")] if args.watch else []
 
-
-
     print(f"Tracking competitors for {len(keywords)} keywords (cost: {len(keywords)} tokens)")
 
     try:
@@ -127,29 +132,48 @@ def main():
         keyword_results = {}
         domain_stats = defaultdict(lambda: {"keywords": [], "positions": []})
 
-        for i, kw in enumerate(keywords, 1):
-            print(f"  [{i}/{len(keywords)}] {kw}...", flush=True)
-            serp = client.search(kw, gl=args.gl, hl=args.hl)
+        lock = threading.Lock()
+        counter = [0]
+
+        def _fetch(kw):
+            serp, from_cache = serp_cache.search_cached(client, kw, args.gl, args.hl)
             data = serp.get("data", {})
             organic = data.get("results", {}).get("organic_results", [])
-
             top_10 = []
             for r in organic[:10]:
-                domain = r.get("domain", "").lower().replace("www.", "")
-                entry = {
+                d = r.get("domain", "").lower().replace("www.", "")
+                top_10.append({
                     "position": r.get("pos", r.get("global_pos")),
-                    "domain": domain,
+                    "domain": d,
                     "url": r.get("url", r.get("link", "")),
                     "title": r.get("title", ""),
-                }
-                top_10.append(entry)
-                domain_stats[domain]["keywords"].append(kw)
-                domain_stats[domain]["positions"].append(entry["position"])
+                })
+            return top_10, from_cache
 
-            keyword_results[kw] = {"top_10": top_10}
+        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+            futures = {executor.submit(_fetch, kw): kw for kw in keywords}
+            for future in as_completed(futures):
+                kw = futures[future]
+                with lock:
+                    counter[0] += 1
+                    n = counter[0]
+                try:
+                    top_10, from_cache = future.result()
+                    keyword_results[kw] = {"top_10": top_10}
+                    tag = "[cache]" if from_cache else "[api]"
+                    print(f"  [{n}/{len(keywords)}] {kw}... {tag}")
+                except Exception as e:
+                    keyword_results[kw] = {"top_10": []}
+                    print(f"  [{n}/{len(keywords)}] {kw}... FAILED ({type(e).__name__}: {e})")
+
+        for kw, kw_data in keyword_results.items():
+            for entry in kw_data["top_10"]:
+                domain_stats[entry["domain"]]["keywords"].append(kw)
+                if entry["position"] is not None:
+                    domain_stats[entry["domain"]]["positions"].append(entry["position"])
 
         # Save snapshot
-        data_dir = Path("data/competitor-tracking")
+        data_dir = _PROJECT_ROOT / "output" / "data" / "competitor-tracking"
         data_dir.mkdir(parents=True, exist_ok=True)
         snapshot = {
             "date": str(date.today()),
@@ -157,6 +181,7 @@ def main():
             "hl": args.hl,
             "watched_domains": watched,
             "keywords": keyword_results,
+            "domain_stats": {k: v for k, v in domain_stats.items()},
         }
         snapshot_path = data_dir / f"{date.today()}.json"
         snapshot_path.write_text(json.dumps(snapshot, indent=2, ensure_ascii=False) + "\n")
@@ -168,7 +193,7 @@ def main():
         # Sort domains by frequency
         sorted_domains = sorted(
             domain_stats.items(),
-            key=lambda x: (-len(x[1]["keywords"]), sum(x[1]["positions"]) / len(x[1]["positions"]))
+            key=lambda x: (-len(x[1]["keywords"]), sum(x[1]["positions"]) / max(len(x[1]["positions"]), 1))
         )
 
         # Print results
@@ -183,9 +208,10 @@ def main():
         print("|--------|-------------------|--------------|")
         for domain, stats in sorted_domains[:15]:
             count = len(stats["keywords"])
-            avg_pos = sum(stats["positions"]) / len(stats["positions"])
+            avg_pos = sum(stats["positions"]) / len(stats["positions"]) if stats["positions"] else 0
             marker = " **" if domain in watched else ""
-            print(f"| {domain}{marker} | {count}/{len(keywords)} | {avg_pos:.1f} |")
+            avg_str = f"{avg_pos:.1f}" if stats["positions"] else "—"
+            print(f"| {domain}{marker} | {count}/{len(keywords)} | {avg_str} |")
         print()
 
         # Keyword × Domain matrix for watched domains

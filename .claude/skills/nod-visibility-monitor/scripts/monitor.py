@@ -9,15 +9,19 @@ Usage:
 
 import argparse
 import json
-import os
 import sys
-from collections import defaultdict
+import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'nod-nodeshub-api' / 'scripts'))
 from client import NodeshubClient, NodeshubError
-from report import render_section_wrapper, make_section_id, html_table, summary_card, bar_chart, badge
+from report import render_section_wrapper, make_section_id, html_table, summary_card, bar_chart, badge, find_repo_root
+import serp_cache
+
+_PROJECT_ROOT = find_repo_root()
+MAX_WORKERS = 5
 
 # Visibility scoring weights
 POSITION_POINTS = {
@@ -101,7 +105,7 @@ def render_report_section(data):
         for d, info in competitors.items():
             comp_rows.append([e(d), str(info.get("score", 0)),
                               f"{info.get('visibility_pct', 0)}%"])
-        comp_rows.sort(key=lambda r: -int(r[1].split("/")[0]) if "/" not in r[1] else -int(r[1]))
+        comp_rows.sort(key=lambda r: -int(r[1]))
         parts.append("<h3>Competitor Comparison</h3>")
         parts.append(html_table(["Domain", "Score", "Visibility %"], comp_rows))
 
@@ -119,7 +123,7 @@ def main():
     parser.add_argument("--hl", default="en", help="Language code (default: en)")
     parser.add_argument("--competitors", help="Comma-separated competitor domains")
     parser.add_argument("--compare", action="store_true", help="Compare with previous snapshot")
-    parser.add_argument("--raw", action="store_true", help="Output raw JSON")
+    parser.add_argument("--raw", action="store_true", help="Output raw JSON to stdout (also saves snapshot to disk)")
     args = parser.parse_args()
 
     # Collect keywords
@@ -139,20 +143,39 @@ def main():
     competitors = [d.strip().lower().replace("www.", "") for d in args.competitors.split(",")] if args.competitors else []
     all_domains = [args.domain.lower().replace("www.", "")] + competitors
 
-
-
     print(f"Monitoring visibility for {args.domain} across {len(keywords)} keywords (cost: {len(keywords)} tokens)")
 
     try:
         client = NodeshubClient()
         domain_scores = {d: {"keywords": {}, "total": 0} for d in all_domains}
 
-        for i, kw in enumerate(keywords, 1):
-            print(f"  [{i}/{len(keywords)}] {kw}...", flush=True)
-            serp = client.search(kw, gl=args.gl, hl=args.hl)
-            data = serp.get("data", {})
-            organic = data.get("results", {}).get("organic_results", [])
+        lock = threading.Lock()
+        counter = [0]
+        serp_results = {}
 
+        def _fetch(kw):
+            serp, from_cache = serp_cache.search_cached(client, kw, args.gl, args.hl)
+            data = serp.get("data", {})
+            return data.get("results", {}).get("organic_results", []), from_cache
+
+        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+            futures = {executor.submit(_fetch, kw): kw for kw in keywords}
+            for future in as_completed(futures):
+                kw = futures[future]
+                with lock:
+                    counter[0] += 1
+                    n = counter[0]
+                try:
+                    organic, from_cache = future.result()
+                    serp_results[kw] = organic
+                    tag = "[cache]" if from_cache else "[api]"
+                    print(f"  [{n}/{len(keywords)}] {kw}... {tag}")
+                except Exception as e:
+                    serp_results[kw] = []
+                    print(f"  [{n}/{len(keywords)}] {kw}... FAILED ({type(e).__name__}: {e})")
+
+        for kw in keywords:
+            organic = serp_results[kw]
             for domain in all_domains:
                 pos = find_domain_position(organic, domain)
                 points = score_position(pos)
@@ -166,7 +189,7 @@ def main():
 
         # Save snapshot
         primary = args.domain.lower().replace("www.", "")
-        data_dir = Path("data/visibility") / primary
+        data_dir = _PROJECT_ROOT / "output" / "data" / "visibility" / primary
         data_dir.mkdir(parents=True, exist_ok=True)
 
         snapshot = {

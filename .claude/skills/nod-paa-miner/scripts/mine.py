@@ -12,11 +12,36 @@ import argparse
 import json
 import re
 import sys
+import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import datetime
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'nod-nodeshub-api' / 'scripts'))
 from client import NodeshubClient, NodeshubError
-from report import render_section_wrapper, make_section_id, html_table, summary_card, badge
+from report import render_section_wrapper, make_section_id, html_table, summary_card, badge, find_repo_root
+import serp_cache
+
+_PROJECT_ROOT = find_repo_root()
+
+
+def _slug(text):
+    return re.sub(r"[^\w\s-]", "", text.lower().strip()).replace(" ", "_")[:100]
+
+
+def _output_path(keywords, file_arg):
+    if file_arg:
+        stem = _slug(Path(file_arg).stem)
+    elif len(keywords) == 1:
+        stem = _slug(keywords[0])
+    else:
+        stem = _slug(keywords[0]) + f"_and_{len(keywords) - 1}_more"
+    date = datetime.now().strftime("%Y%m%d")
+    out_dir = _PROJECT_ROOT / "output" / "data" / "paa"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    return out_dir / f"{stem}_{date}.json"
+
+MAX_WORKERS = 5
 
 
 def extract_paa(serp_data):
@@ -161,7 +186,7 @@ def main():
     parser.add_argument("--gl", default="us", help="Country code (default: us)")
     parser.add_argument("--hl", default="en", help="Language code (default: en)")
     parser.add_argument("--cluster", action="store_true", help="Cluster questions by topic (requires OPENROUTER_API_KEY)")
-    parser.add_argument("--raw", action="store_true", help="Output raw JSON")
+    parser.add_argument("--raw", action="store_true", help="Output raw JSON to stdout (also saves to disk)")
     args = parser.parse_args()
 
     # Collect keywords
@@ -183,31 +208,50 @@ def main():
     try:
         client = NodeshubClient()
         questions_by_keyword = {}
-        total_raw = 0
+        lock = threading.Lock()
+        counter = [0]
 
-        for i, kw in enumerate(keywords, 1):
-            print(f"  [{i}/{len(keywords)}] {kw}...", end=" ", flush=True)
-            serp = client.search(kw, gl=args.gl, hl=args.hl)
-            paa = extract_paa(serp)
-            questions_by_keyword[kw] = paa
-            total_raw += len(paa)
-            print(f"{len(paa)} questions")
+        def _fetch(kw):
+            serp, from_cache = serp_cache.search_cached(client, kw, args.gl, args.hl)
+            return extract_paa(serp), from_cache
+
+        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+            futures = {executor.submit(_fetch, kw): kw for kw in keywords}
+            for future in as_completed(futures):
+                kw = futures[future]
+                with lock:
+                    counter[0] += 1
+                    n = counter[0]
+                try:
+                    paa, from_cache = future.result()
+                    questions_by_keyword[kw] = paa
+                    tag = "[cache]" if from_cache else "[api]"
+                    print(f"  [{n}/{len(keywords)}] {kw}... {len(paa)} questions {tag}")
+                except Exception as e:
+                    questions_by_keyword[kw] = []
+                    print(f"  [{n}/{len(keywords)}] {kw}... FAILED ({type(e).__name__}: {e})")
+
+        total_raw = sum(len(v) for v in questions_by_keyword.values())
 
         # Deduplicate
         unique = deduplicate(questions_by_keyword)
 
+        output = {
+            "keywords_analyzed": len(keywords),
+            "total_raw_questions": total_raw,
+            "unique_questions": len(unique),
+            "questions": unique,
+            "by_keyword": {kw: qs for kw, qs in questions_by_keyword.items()},
+        }
+
         if args.raw:
-            output = {
-                "keywords_analyzed": len(keywords),
-                "total_raw_questions": total_raw,
-                "unique_questions": len(unique),
-                "questions": unique,
-                "by_keyword": {kw: qs for kw, qs in questions_by_keyword.items()},
-            }
             if args.cluster:
                 clusters = cluster_questions(unique, hl=args.hl)
                 if clusters:
                     output["clusters"] = clusters
+            save_path = _output_path(keywords, args.file)
+            save_path.write_text(json.dumps(output, indent=2, ensure_ascii=False))
+            print(f"Saved to: {save_path}", file=sys.stderr)
             print(json.dumps(output, indent=2, ensure_ascii=False))
             return
 
@@ -258,6 +302,13 @@ def main():
         kw_counts = {kw: len(qs) for kw, qs in questions_by_keyword.items()}
         for kw, count in sorted(kw_counts.items(), key=lambda x: -x[1]):
             print(f"- {kw}: {count} questions")
+
+        # Save JSON output
+        if clusters:
+            output["clusters"] = clusters
+        save_path = _output_path(keywords, args.file)
+        save_path.write_text(json.dumps(output, indent=2, ensure_ascii=False))
+        print(f"\nSaved to: {save_path}")
 
     except NodeshubError as e:
         print(f"Error: {e}", file=sys.stderr)

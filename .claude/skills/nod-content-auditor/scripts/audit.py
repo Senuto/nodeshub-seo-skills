@@ -207,17 +207,17 @@ def main():
 
     mode_cost = 8.5 if args.mode == "standard" else 31
     print(f"Auditing: \"{args.keyword}\" | country: {args.gl} | top: {args.top} | "
-          f"crawl: {'off' if args.no_crawl else 'on'}")
+          f"crawl: {'off' if args.no_crawl else 'on'}", file=sys.stderr)
 
     try:
         client = NodeshubClient()
 
         # ── Step 1: SERP data ──
-        print("  [1/4] Fetching SERP data...", flush=True)
+        print("  [1/4] Fetching SERP data...", flush=True, file=sys.stderr)
         serp = client.search(args.keyword, gl=args.gl, hl=args.hl)
 
         # ── Step 2: Keyword expansion ──
-        print("  [2/4] Expanding keywords...", flush=True)
+        print("  [2/4] Expanding keywords...", flush=True, file=sys.stderr)
         fanout = client.query_fanout(args.keyword, hl=args.hl, mode=args.mode,
                                      add_questions=True, add_topic_leaders=False)
 
@@ -282,12 +282,12 @@ def main():
                                if r.get("url") or r.get("link")]
 
             print(f"  [3/4] Crawling {len(competitor_urls)} competitor pages via Jina Reader...",
-                  flush=True)
+                  flush=True, file=sys.stderr)
 
             def _on_progress(done, total, url, ok):
                 status = "OK" if ok else "SKIP"
                 domain = url.split("/")[2] if "/" in url else url
-                print(f"    [{done}/{total}] {status} {domain}", flush=True)
+                print(f"    [{done}/{total}] {status} {domain}", flush=True, file=sys.stderr)
 
             competitor_contents = reader.fetch_batch(
                 competitor_urls, max_workers=3, max_words=1500,
@@ -296,18 +296,18 @@ def main():
 
             # Crawl user's URL if provided
             if args.url:
-                print(f"  [3/4] Crawling your page: {args.url}...", flush=True)
+                print(f"  [3/4] Crawling your page: {args.url}...", flush=True, file=sys.stderr)
                 user_content = reader.fetch(args.url, max_words=2000)
                 if user_content["ok"]:
-                    print(f"    OK ({user_content['word_count']} words)", flush=True)
+                    print(f"    OK ({user_content['word_count']} words)", flush=True, file=sys.stderr)
                 else:
-                    print(f"    FAILED: {user_content.get('error', 'too short')}", flush=True)
+                    print(f"    FAILED: {user_content.get('error', 'too short')}", flush=True, file=sys.stderr)
                     user_content = None
         else:
-            print("  [3/4] Skipping crawl (--no-crawl mode)", flush=True)
+            print("  [3/4] Skipping crawl (--no-crawl mode)", flush=True, file=sys.stderr)
 
         # ── Step 4: Content gap analysis ──
-        print("  [4/4] Analyzing content gaps...", flush=True)
+        print("  [4/4] Analyzing content gaps...", flush=True, file=sys.stderr)
 
         competitor_texts = [c["content"] for c in competitor_contents]
 

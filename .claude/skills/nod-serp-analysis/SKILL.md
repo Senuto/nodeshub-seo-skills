@@ -41,6 +41,13 @@ If missing, see [nod-nodeshub-api setup](../nod-nodeshub-api/setup/README.md).
 
 **If NodesHub is not set up:** Walk the user through the full process: (1) Get API key from [nodeshub.io](https://nodeshub.io) (API Playground). (2) Save to `.claude/settings.local.json` under `env.NODESHUB_API_KEY`, or run `python3 .claude/skills/nod-nodeshub-api/scripts/save_key.py YOUR_KEY`. (3) Point to [nod-nodeshub-api setup](../nod-nodeshub-api/setup/README.md) for details. (4) Have them run `check_setup.py` again to verify.
 
+## Input
+
+Before running, always ask the user for:
+1. **Keyword** — what to analyze
+2. **Market** — country code `--gl` and language `--hl` (e.g. `pl/pl`, `us/en`)
+3. **Device** — `desktop` (default) or `mobile`? SERP features and layouts differ significantly between devices.
+
 ## Workflow: Single Keyword SERP Analysis
 
 1. **Fetch SERP data** — run `serpdata.py` with `--raw` flag

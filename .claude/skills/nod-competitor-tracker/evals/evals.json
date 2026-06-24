@@ -9,7 +9,7 @@
         "Calls SERPdata API for all 3 keywords",
         "Extracts competitor domains from organic results",
         "Produces a comparison table showing competitor positions",
-        "Saves snapshot to data/competitor-tracking/",
+        "Saves snapshot to output/data/competitor-tracking/",
         "Highlights where acmecrm.com ranks vs competitors"
       ],
       "files": []
