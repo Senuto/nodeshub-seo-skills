@@ -11,9 +11,14 @@
  *   knowledge/metrics/analytics/ga4-2026-02-24.json
  */
 
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { createRequire } from 'module';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const require = createRequire(import.meta.url);
 const { google } = require('googleapis');
-const fs = require('fs');
-const path = require('path');
 
 // Configuration — update propertyId after running /connect-ga4
 const CONFIG = {

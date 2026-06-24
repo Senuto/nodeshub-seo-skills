@@ -1,0 +1,51 @@
+{
+  "skill_name": "nod-money-keywords",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Which expensive keywords am I paying for that I could win with SEO instead to cut my CAC?",
+      "expected_output": "Should load volume/cpc/position from nod-merger's by_query, select high-CPC high-volume keywords where organic position is weak (>10 or not ranking), score each by estimated monthly paid value replaceable at the target position, rank descending, and report the total addressable paid value. Saves a dated JSON report.",
+      "assertions": [
+        "Triggers on 'reduce cac' / 'win paid terms organically' / 'expensive keywords' language",
+        "Loads volume, cpc, and organic position from nod-merger's by_query (or instructs to run merge.py if missing)",
+        "Selects money keywords where cpc >= min-cpc AND volume >= min-volume AND organic position > 10 or not ranking",
+        "Scores each by estimated reclaimable monthly value = volume * CTR at target position * cpc",
+        "Ranks money keywords by estimated reclaimable value descending",
+        "Reports a total addressable paid value and labels it an estimate",
+        "Notes it is the complement/inverse of nod-paid-organic",
+        "Saves report to data/money-keywords/{date}.json",
+        "Reports 0 NodesHub tokens"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Run the money keywords analysis on the demo data and show me the high-CPC opportunities.",
+      "expected_output": "Should run analyze.py --demo against the inline by_query fixture, print the ranked money-keyword table plus the almost-there table, and surface terms like 'project management tool' and 'enterprise crm software' ordered by estimated reclaimable value. Excludes top-3 terms, low-CPC terms, low-volume terms, and terms missing cpc.",
+      "assertions": [
+        "Runs with the --demo flag (no real data or key needed)",
+        "Prints a ranked money keywords table and an almost-there (rank 4-10) table",
+        "Orders money keywords by estimated reclaimable monthly value descending",
+        "Excludes keywords ranking top-3, below the CPC floor, below the volume floor, or missing cpc/volume",
+        "Prints the total addressable paid value",
+        "Does not call the NodesHub API"
+      ],
+      "files": [
+        ".claude/skills/nod-money-keywords/scripts/analyze.py"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Only show me keywords above $2 CPC and 500 searches, and assume I can realistically reach position 3.",
+      "expected_output": "Should run with --min-cpc 2.0 --min-volume 500 --target-position 3, applying the stricter filters and using the position-3 CTR (~10%) in the reclaimable-value estimate. The almost-there list still uses positions 4-10.",
+      "assertions": [
+        "Honors --min-cpc and --min-volume thresholds in selection",
+        "Uses --target-position 3 and the corresponding CTR (~10%) in the value estimate",
+        "Keeps the almost-there band fixed at positions 4-10",
+        "Still reports the total addressable paid value as an estimate",
+        "Saves report to data/money-keywords/{date}.json"
+      ],
+      "files": []
+    }
+  ]
+}

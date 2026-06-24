@@ -1,0 +1,49 @@
+{
+  "skill_name": "nod-content-gap",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Run a content gap analysis for me against my competitors using the demo data and show me what they rank for that I don't.",
+      "expected_output": "Should run analyze.py --demo, build the keyword universe from both competitors, classify each keyword into Missing / Weak / Shared-strong, print the gap summary plus a ranked Missing table and a ranked Weak table, and save a dated JSON report.",
+      "assertions": [
+        "Triggers on content gap / 'what competitors rank for that I don't' language",
+        "Runs with the --demo flag (no DataForSEO key needed)",
+        "Builds the universe as the union of competitor ranked keywords",
+        "Flags Missing keywords where a competitor ranks and the domain does not (e.g. 'project management software', 'kanban board')",
+        "Flags Weak keywords where a competitor beats the domain by the margin (e.g. 'gantt chart maker' you #14 vs competitor #3)",
+        "Counts how many competitors rank each gap keyword (prevalence)",
+        "Sorts gaps by a deterministic potential score (volume x prevalence / difficulty)",
+        "Saves report to data/content-gap/{date}.json",
+        "Reports 0 NodesHub tokens used"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "I exported ranked keyword lists for my site and two competitors as CSVs. Find the keyword gaps.",
+      "expected_output": "Should run analyze.py with --mine for the user's CSV and a repeated --competitor for each competitor CSV, normalize the keyword/position/volume columns, and produce the Missing and Weak gap tables ranked by potential without calling DataForSEO or NodesHub.",
+      "assertions": [
+        "Uses --mine PATH for the user's ranked keywords and --competitor PATH per competitor",
+        "Normalizes column names (keyword/query, position/pos/rank, volume/search_volume/sv)",
+        "Defaults to the file source when --mine/--competitor are provided",
+        "Classifies Missing vs Weak vs Shared/strong deterministically",
+        "Does not require DataForSEO credentials for the file path",
+        "Does not call the NodesHub API"
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Pull what my competitors rank for from DataForSEO and confirm the top missing keyword is really a gap on the live SERP.",
+      "expected_output": "Should use --source dfs with --domain and --competitors to fetch ranked_keywords per domain (or print the DataForSEO setup message if no credentials), explain that NodesHub cannot export a domain's full ranked set so DataForSEO is required, then run --verify-serp on the top gaps (1 token per keyword) and skip gracefully if no NodesHub key is set.",
+      "assertions": [
+        "Uses --source dfs with --domain and --competitors",
+        "Explains DataForSEO is needed because NodesHub has no per-domain ranked-keyword export",
+        "Prints a clear setup message and exits if DataForSEO credentials are missing",
+        "Uses --verify-serp to confirm a top gap on the live SERP",
+        "Notes the 1 token per keyword cost of verification and skips gracefully without a NodesHub key"
+      ],
+      "files": []
+    }
+  ]
+}

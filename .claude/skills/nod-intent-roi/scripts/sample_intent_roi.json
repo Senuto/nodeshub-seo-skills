@@ -1,0 +1,40 @@
+{
+  "_note": "Offline fixture for nod-intent-roi --demo. Mirrors a nod-merger output (by_query + by_url) plus a GSC queryPages array for query->page association. by_query rows carry an 'intent' so the demo needs no NodesHub key. Conversions live on by_url (GA4 has no query dimension).",
+  "merged": {
+    "meta": {
+      "generatedAt": "2026-06-11",
+      "sources_present": ["gsc", "ga4", "ads"],
+      "serp_enriched": true,
+      "note": "Demo fixture. GA4 conversions are per-URL only."
+    },
+    "by_query": [
+      {"query": "buy running shoes online", "intent": "transactional", "clicks": 320, "impressions": 6100, "ctr": 5.25, "position": 3.2},
+      {"query": "best trail running shoes 2026", "intent": "commercial", "clicks": 280, "impressions": 9400, "ctr": 2.98, "position": 5.1},
+      {"query": "running shoe size guide", "intent": "informational", "clicks": 540, "impressions": 22000, "ctr": 2.45, "position": 6.8},
+      {"query": "how to clean running shoes", "intent": "informational", "clicks": 410, "impressions": 18500, "ctr": 2.22, "position": 7.4},
+      {"query": "asics gel kayano 31 review", "intent": "commercial", "clicks": 190, "impressions": 5200, "ctr": 3.65, "position": 4.9},
+      {"query": "runworld login", "intent": "navigational", "clicks": 95, "impressions": 1100, "ctr": 8.64, "position": 1.4},
+      {"query": "marathon training plan", "intent": "informational", "clicks": 360, "impressions": 15800, "ctr": 2.28, "position": 8.1},
+      {"query": "discount code running shoes", "intent": "transactional", "clicks": 150, "impressions": 3400, "ctr": 4.41, "position": 2.7}
+    ],
+    "by_url": [
+      {"url": "/shop/running-shoes", "in_gsc": true, "in_ga4": true, "clicks": 470, "impressions": 9500, "position": 3.0, "sessions": 1900, "conversions": 152},
+      {"url": "/blog/best-trail-running-shoes-2026", "in_gsc": true, "in_ga4": true, "clicks": 280, "impressions": 9400, "position": 5.1, "sessions": 1200, "conversions": 36},
+      {"url": "/guides/running-shoe-size-guide", "in_gsc": true, "in_ga4": true, "clicks": 540, "impressions": 22000, "position": 6.8, "sessions": 2100, "conversions": 8},
+      {"url": "/blog/how-to-clean-running-shoes", "in_gsc": true, "in_ga4": true, "clicks": 410, "impressions": 18500, "position": 7.4, "sessions": 1600, "conversions": 3},
+      {"url": "/blog/asics-gel-kayano-31-review", "in_gsc": true, "in_ga4": true, "clicks": 190, "impressions": 5200, "position": 4.9, "sessions": 720, "conversions": 21},
+      {"url": "/account/login", "in_gsc": true, "in_ga4": true, "clicks": 95, "impressions": 1100, "position": 1.4, "sessions": 410, "conversions": 2},
+      {"url": "/guides/marathon-training-plan", "in_gsc": true, "in_ga4": true, "clicks": 360, "impressions": 15800, "position": 8.1, "sessions": 1450, "conversions": 5}
+    ]
+  },
+  "queryPages": [
+    {"query": "buy running shoes online", "page": "/shop/running-shoes", "clicks": 320},
+    {"query": "discount code running shoes", "page": "/shop/running-shoes", "clicks": 150},
+    {"query": "best trail running shoes 2026", "page": "/blog/best-trail-running-shoes-2026", "clicks": 280},
+    {"query": "running shoe size guide", "page": "/guides/running-shoe-size-guide", "clicks": 540},
+    {"query": "how to clean running shoes", "page": "/blog/how-to-clean-running-shoes", "clicks": 410},
+    {"query": "asics gel kayano 31 review", "page": "/blog/asics-gel-kayano-31-review", "clicks": 190},
+    {"query": "runworld login", "page": "/account/login", "clicks": 95},
+    {"query": "marathon training plan", "page": "/guides/marathon-training-plan", "clicks": 360}
+  ]
+}

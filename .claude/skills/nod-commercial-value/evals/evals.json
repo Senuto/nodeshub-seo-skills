@@ -1,0 +1,49 @@
+{
+  "skill_name": "nod-commercial-value",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I have a list of keywords. Tell me what to work on first by revenue potential, not just search volume.",
+      "expected_output": "Should load the keyword set (newest merged by_query view or a CSV), compute commercial_value = volume * cpc, weight it by an opportunity multiplier from current position, sort by priority, split into Tier 1/2/3, and report the total commercial value plus the Tier 1 share. Saves a dated JSON report.",
+      "assertions": [
+        "Triggers on 'what to work on first' / 'revenue potential' language",
+        "Computes commercial_value as volume * cpc",
+        "Applies the opportunity multiplier (full/high/medium/low) from current position",
+        "Computes priority = commercial_value * opportunity_multiplier",
+        "Ranks keywords into Tier 1 / 2 / 3 by priority",
+        "Reports total commercial value of the set and the Tier 1 share of priority",
+        "Saves report to data/commercial-value/{date}.json",
+        "Reports 0 NodesHub tokens used"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Run the commercial value lens on the demo data and show me why a high-volume keyword can still be low priority.",
+      "expected_output": "Should run analyze.py --demo against sample_keywords.csv, print the tiered table, and surface that a high-volume keyword like 'free seo tools' (40,500 volume) lands in Tier 3 because it already ranks top-3 with a low CPC, while a smaller high-CPC keyword that does not rank lands in Tier 1.",
+      "assertions": [
+        "Runs with the --demo flag against sample_keywords.csv",
+        "Prints volume, cpc, commercial_value, position, opportunity, and priority per keyword",
+        "Shows a high-volume but already-captured keyword demoted to a lower tier",
+        "Shows a high-CPC not-ranking keyword promoted to Tier 1",
+        "Does not call the NodesHub API"
+      ],
+      "files": [
+        ".claude/skills/nod-commercial-value/scripts/sample_keywords.csv"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Here is a CSV export of keywords with volume and cpc but no positions. Prioritize them by money.",
+      "expected_output": "Should ingest the CSV via --file, treat missing positions as 'not ranking' (full opportunity), value each keyword by volume * cpc, rank by priority into tiers, and save the report. Should note that keywords missing volume or cpc are scored zero and sink to the bottom.",
+      "assertions": [
+        "Reads the keyword CSV via --file with flexible header aliases",
+        "Treats missing position as 'not ranking' with full (1.0) opportunity",
+        "Scores keywords missing volume or cpc at zero so they sort last",
+        "Produces a tiered, priority-ranked list",
+        "Saves report to data/commercial-value/{date}.json with 0 NodesHub tokens"
+      ],
+      "files": []
+    }
+  ]
+}

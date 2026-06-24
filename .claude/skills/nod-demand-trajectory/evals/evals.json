@@ -1,0 +1,50 @@
+{
+  "skill_name": "nod-demand-trajectory",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Is demand for my keywords growing or shrinking year over year? Tell me where to invest and where to exit.",
+      "expected_output": "Should compute, per keyword, YoY growth (last 12 months vs prior 12 when 24 months exist) and a normalized trend slope (% per month), classify each as Rising/Declining/Stable/Emerging/Fading, roll up a portfolio rising-vs-declining volume share, and produce invest (double down) and exit (phase out) recommendations. Saves a dated JSON report and reports 0 NodesHub tokens.",
+      "assertions": [
+        "Triggers on demand-trend / is-this-keyword-growing / invest-or-exit / yoy language",
+        "Computes YoY growth (last 12 months vs prior 12) when 24 months are available",
+        "Computes a least-squares trend slope normalized as percent per month",
+        "Classifies each keyword as Rising, Declining, Stable, Emerging, or Fading",
+        "Produces a portfolio summary with rising-vs-declining volume share",
+        "Produces invest (double down) and exit (phase out) recommendations",
+        "Saves report to data/demand-trajectory/{date}.json",
+        "Reports 0 NodesHub tokens used"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Run the demand trajectory analyzer on the demo data and show me the rising and declining topics.",
+      "expected_output": "Should run analyze.py --demo against the built-in fixture (a rising topic, a declining topic, a stable one, and a spiky-but-flat one), print the per-keyword table with YoY and slope, label the rising and declining topics correctly, and crucially classify the spiky-but-flat keyword as Stable rather than mistaking its seasonal swing for a trend.",
+      "assertions": [
+        "Runs with the --demo flag and needs no API key or data file",
+        "Prints a per-keyword table with latest 12m volume, YoY, slope, and classification",
+        "Labels the rising topic Rising and the declining topic Declining",
+        "Classifies the spiky-but-flat keyword as Stable (deseasonalization works)",
+        "Lists double-down and phase-out recommendations",
+        "Does not call the NodesHub API"
+      ],
+      "files": [
+        ".claude/skills/nod-demand-trajectory/scripts/analyze.py"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "I have a CSV with 18 months of monthly search volumes per keyword. Classify each topic's trajectory even though I do not have a full 24 months.",
+      "expected_output": "Should ingest the CSV via --series (long format keyword,date,volume), and because YoY needs 24 months, fall back to the trend slope to classify short-history keywords as Emerging (steep positive) or Fading (steep negative) or Stable. Falls back to a clear DataForSEO setup message if --source dfs is requested without credentials.",
+      "assertions": [
+        "Reads per-keyword dated monthly volumes from the CSV via --series",
+        "Handles a short (~18 month) history where YoY is unavailable",
+        "Uses the trend slope to classify short-history keywords (Emerging / Fading / Stable)",
+        "If DataForSEO is requested without DATAFORSEO_LOGIN/PASSWORD, prints a clear setup message and exits gracefully",
+        "Saves the report to data/demand-trajectory/{date}.json"
+      ],
+      "files": []
+    }
+  ]
+}

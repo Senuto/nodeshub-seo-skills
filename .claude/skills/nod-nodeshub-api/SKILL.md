@@ -52,17 +52,31 @@ This skill is the base API client. The real power is in skills that use it:
 <!-- SKILLS:START -->
 | Skill | What it does | Cost per keyword |
 |-------|-------------|------------------|
-| `/nod-competitor-tracker` | Tracks competitor domains across keyword sets, shows who ranks where | 1 token |
-| `/nod-content-auditor` | Audits content against SERP reality — finds gaps, missing keywords | ~8.5 tokens (standard) / ~31 tokens (reasoning) |
-| `/nod-content-brief` | Combines SERP + keyword research into a ready-to-write content brief | ~8.5 tokens (standard) / ~31 tokens (reasoning) |
-| `/nod-featured-snippet-hunter` | Finds Featured Snippet opportunities — steal, defend, or target for your domain | 1 token |
-| `/nod-intent-classifier` | Classifies search intent (info/commercial/transactional/navigational) from SERP signals | 1 token |
-| `/nod-keyword-research` | Expands a seed keyword into related phrases, questions, long-tail variations, topic clusters | 7.5 tokens (standard) / 30 tokens (reasoning) |
-| `/nod-paa-miner` | Mines People Also Ask questions from SERPs, deduplicates, optionally clusters by topic | 1 token + optional OpenRouter |
-| `/nod-rank-tracker` | Tracks keyword positions for a domain over time, compares changes | 1 token |
-| `/nod-serp-analysis` | Analyzes Google top 10 for a keyword — who ranks, SERP features, intent, content gaps | 1 token |
-| `/nod-serp-clusters` | | | — |
-| `/nod-visibility-monitor` | Calculates weighted SEO visibility score, compares with competitors | 1 token |
+| `/nod-aio` | AI Overview (GEO/AEO) visibility for a keyword set, plus a brief-under-AIO recommendation | — |
+| `/nod-alerting` | Turns one-off SEO snapshots into monitoring | — |
+| `/nod-brand-split` | Deterministically split Google Search Console demand into BRANDED vs NON-BRANDED queries, so you can see how much traffic is people who already know the brand versus genuine new acquisition | — |
+| `/nod-brief-builder` | Turn a user-provided keyword LIST into content briefs | — |
+| `/nod-cannibalization` | Deterministic keyword cannibalization detector that runs on Google Search Console data | — |
+| `/nod-commercial-value` | Deterministically rank a keyword set by REVENUE potential, not by traffic | — |
+| `/nod-competitor-tracker` | Track competitor domains across keyword sets using NodesHub SERPdata API | 1 token per keyword checked |
+| `/nod-content-auditor` | Audit existing content against current SERP reality using NodesHub SERPdata, Query Fan-out APIs, and Jina Reader for competitor page crawling | ~8 |
+| `/nod-content-brief` | Generates data-driven SEO content briefs using NodesHub SERPdata and Query Fan-out APIs | — |
+| `/nod-content-gap` | Classic content/keyword gap analysis: the keywords your competitors rank for that you don't (or rank worse for) | — |
+| `/nod-demand-trajectory` | Year-over-year demand trajectory for a keyword set: decide whether each keyword/topic is Rising, Stable, or Declining so you know where to invest and where to exit | — |
+| `/nod-featured-snippet-hunter` | Find Featured Snippet and Answer Box opportunities by analyzing Google SERPs using NodesHub SERPdata API | 1 token per keyword |
+| `/nod-intent-roi` | Ties search intent to actual conversions so content is prioritized by ROI, not by traffic volume | — |
+| `/nod-keyword-research` | Expand seed keywords into comprehensive keyword lists using NodesHub Query Fan-out API | — |
+| `/nod-merger` | Merge Google Search Console + Google Analytics 4 + Google Ads into one clean funnel dataset keyed by URL (and by query where available) | — |
+| `/nod-money-keywords` | Find the expensive paid terms you could win organically to cut your customer acquisition cost (CAC) | — |
+| `/nod-opportunity-detector` | Deterministic SEO opportunity engine | — |
+| `/nod-paa-miner` | Mine "People Also Ask" questions from Google SERPs for a list of keywords using NodesHub SERPdata API | 1 token per keyword + optional OpenRouter for clustering |
+| `/nod-paid-organic` | Marketing-grade overlap analysis between paid (Google Ads) and organic (GSC) for the same keywords | — |
+| `/nod-rank-tracker` | Track keyword ranking positions for a domain over time using NodesHub SERPdata API | 1 token per keyword checked |
+| `/nod-seasonality` | Build ONE site-level seasonality curve from your keyword set so you can see when demand peaks, when to publish, and how to diversify away from a single annual spike | — |
+| `/nod-serp-analysis` | Analyze Google SERP for any keyword using NodesHub SERPdata API | — |
+| `/nod-serp-clusters` | Cluster keywords by SERP similarity — keywords sharing the same Google results belong to the same cluster | 1 NodesHub token per keyword + OpenRouter LLM for naming |
+| `/nod-share-of-search` | Track Share of Search (Les Binet): your brand's search demand as a percentage of the total brand search demand in your category, measured month over month | — |
+| `/nod-visibility-monitor` | Calculate SEO visibility score for a domain using weighted keyword positions via NodesHub SERPdata API | 1 token per keyword |
 <!-- SKILLS:END -->
 
 **After checking balance, always tell the user what they can do with their remaining tokens.** Example for 75 tokens: ~10 SERP analyses, ~5 keyword researches (standard), or ~3-4 full content briefs.

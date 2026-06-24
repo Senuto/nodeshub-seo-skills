@@ -1,0 +1,48 @@
+{
+  "skill_name": "nod-alerting",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "What dropped since last time? Alert me on any significant ranking or traffic changes.",
+      "expected_output": "Should auto-detect a source with at least two snapshots (preferring merged), find the two newest, diff them, and report alerts grouped by severity (critical / warning / info). Saves a dated JSON report and uses 0 NodesHub tokens.",
+      "assertions": [
+        "Triggers on alerting / what-changed language",
+        "Auto-detects the source when --source is not given (prefers merged, then rank, then visibility)",
+        "Finds the two newest snapshots for the chosen source",
+        "Groups alerts by severity (critical / warning / info)",
+        "Each alert shows the entity, before -> after, and the delta",
+        "Saves report to data/alerts/{date}.json",
+        "Reports 0 NodesHub tokens used"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Run the alerting demo and show me the drops and gains.",
+      "expected_output": "Should run alert.py --demo against the bundled in-script merged snapshots, print a severity-grouped table with both traffic drops (a URL losing all clicks, a query down 60%) and gains (a query traffic increase, a position improvement), and write the JSON report.",
+      "assertions": [
+        "Runs with the --demo flag (no real snapshots needed)",
+        "Surfaces a critical alert for clicks falling to zero",
+        "Surfaces at least one traffic-drop alert above the default 25% threshold",
+        "Surfaces at least one info gain (traffic up or position improved)",
+        "Does not call the NodesHub API",
+        "Writes data/alerts/{date}.json"
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Monitor ranking drops for example.com from my rank-tracker history, threshold 5 positions.",
+      "expected_output": "Should compare the two newest rank-history snapshots for example.com with --rank-threshold 5, flag keywords that worsened by 5+ positions or fell out of the top 10 as critical/warning, surface big gains as info, and exit cleanly with a 'need at least two snapshots' message if only one exists.",
+      "assertions": [
+        "Uses --source rank with --domain example.com",
+        "Honors --rank-threshold 5 for the drop cutoff",
+        "Flags lost top rankings as critical and other drops as warning",
+        "Exits cleanly with a clear message when fewer than two snapshots exist (no fabrication)",
+        "Surfaces big gains as info",
+        "Reports 0 NodesHub tokens used"
+      ],
+      "files": []
+    }
+  ]
+}
