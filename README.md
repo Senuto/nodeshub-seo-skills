@@ -1,8 +1,90 @@
-> By cloning or downloading this repository you accept the terms described in [TERMS-OF-USE.md](TERMS-OF-USE.md).
+<sub>By cloning or downloading this repository you accept the terms described in <a href="TERMS-OF-USE.md">TERMS-OF-USE.md</a>.</sub>
+
+<p>
+  <img src="assets/seo-skills-robot.svg" alt="SEO Skills robot" height="64">
+  &nbsp;&nbsp;&nbsp;
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/nodeshub-logo-pixel.svg">
+    <img src="assets/nodeshub-logo-pixel-dark.svg" alt="NodesHub" height="64">
+  </picture>
+</p>
 
 # NodesHub SEO Skills – documentation
 
-A set of skills for SEO automation, built on the NodesHub API (live Google SERP data) and optionally OpenRouter (LLM for cluster naming and brief generation).
+A set of skills for SEO automation, built on the NodesHub API (live Google SERP data).
+
+## Contents
+
+**Start here**
+- [See it in action](#see-it-in-action) — what the skills look like in use
+- [What you can do with it](#what-you-can-do-with-it) — the short version
+- [Installation](#installation) · [Requirements](#requirements) · [Configuration](#configuration-one-time-setup)
+
+**Background**
+- [How it works](#how-it-works) — the two layers: skills and standalone scripts
+- [What this repository is](#what-this-repository-is) · [What is NodesHub?](#what-is-nodeshub) · [Tokens (costs)](#tokens-costs)
+
+**Reference**
+- [Skills – overview](#skills--overview) — all 12 skills in detail
+
+  <details>
+  <summary>Jump to a specific skill</summary>
+
+  *Research & analysis* — [SERP Analysis](#1-serp-analysis-nod-serp-analysis) · [Keyword Research](#2-keyword-research-nod-keyword-research) · [SERP Clusters](#3-serp-clusters-nod-serp-clusters) · [Intent Classifier](#4-intent-classifier-nod-intent-classifier) · [PAA Miner](#5-paa-miner-nod-paa-miner) · [Featured Snippet Hunter](#6-featured-snippet-hunter-nod-featured-snippet-hunter)
+
+  *Tracking & monitoring* — [Rank Tracker](#7-rank-tracker-nod-rank-tracker) · [Competitor Tracker](#8-competitor-tracker-nod-competitor-tracker) · [Visibility Monitor](#9-visibility-monitor-nod-visibility-monitor)
+
+  *Content* — [Content Brief](#10-content-brief-nod-content-brief) · [Content Auditor](#11-content-auditor-nod-content-auditor) · [AI Score](#12-ai-score-ai-score)
+
+  </details>
+
+- [Agents](#agents) — [Topic Planner](#topic-planner) · [Keyword to Publish](#keyword-to-publish) · [Content Humanizer](#content-humanizer)
+- [Common use cases](#common-use-cases) · [Shared parameters](#shared-parameters) · [Where data is stored](#where-data-is-stored)
+- [Project structure](#project-structure) · [Branding](#branding) · [Admin tools](#admin-tools) · [Infrastructure & setup](#infrastructure--setup)
+- [Security](#security) · [FAQ](#faq)
+
+**Legal**
+- [License and terms of use](#license-and-terms-of-use) · [Disclaimer](#disclaimer) · [For business users only](#for-business-users-only)
+
+## See it in action
+
+<p align="center">
+  <img src="assets/demo.gif" alt="Running a keyword research skill from Claude Code" width="800">
+</p>
+
+Full walkthrough on video: [youtu.be/toHjUJI0-7M](https://youtu.be/toHjUJI0-7M?si=0fhjhotubGv32NLU)
+
+## What you can do with it
+
+You type a keyword in Claude Code, and the toolkit does the SEO work that normally takes a stack of tools and a spreadsheet:
+
+- **See who you are up against.** Pull the live top 10 for any keyword, with SERP features (People Also Ask, AI Overview, Knowledge Panel, Local Pack, Videos), competitor domains, and the dominant search intent — `/nod-serp-analysis`.
+- **Build a keyword list from one seed.** Iterative SERP mining plus AI query expansion turns a single phrase into hundreds of deduplicated keywords with source tracking — `/nod-keyword-research`.
+- **Turn that list into a content plan.** Group keywords by SERP similarity into clusters that map to real pages, with an interactive dendrogram report — `/nod-serp-clusters`.
+- **Get a brief a writer can actually use.** Competitor structure, target keywords, questions to answer, and a suggested outline in one document — `/nod-content-brief`.
+- **Audit what you already published.** Crawl the pages beating you and get the topics, questions, and headings your page is missing — `/nod-content-auditor`.
+- **Watch your positions over time.** Daily snapshots of rankings, a weighted visibility score, and competitor movement — `/nod-rank-tracker`, `/nod-visibility-monitor`, `/nod-competitor-tracker`.
+- **Hunt specific SERP wins.** Find featured snippets to steal or defend, and mine PAA questions into a ready FAQ bank — `/nod-featured-snippet-hunter`, `/nod-paa-miner`.
+- **Check whether your text reads as AI.** Genuino scoring with concrete rewrite guidelines, plus an agent that humanizes flagged sections in a loop — `/ai-score`, `content-humanizer`.
+- **Run the whole thing end to end.** Agents chain the steps: seed keyword → research → clusters → briefs (`topic-planner`), or keyword → brief → written article → AI check → audit (`keyword-to-publish`).
+
+New here? Type `/guide` in Claude Code and it will help you pick the right skill for your goal.
+
+## Installation
+
+Clone the repo:
+
+```bash
+git clone https://github.com/Senuto/nodeshub-seo-skills.git
+```
+
+<p align="center">
+  <img src="assets/install.gif" alt="Cloning the repository and opening it in the editor" width="800">
+</p>
+
+Full walkthrough on video: [youtu.be/toHjUJI0-7M](https://youtu.be/toHjUJI0-7M?si=0fhjhotubGv32NLU)
+
+## How it works
 
 The toolkit consists of two layers:
 
@@ -38,14 +120,6 @@ NodesHub exposes three main endpoints:
 All data is live — fetched from Google at the moment you make the request, not pulled from a historical database. This means results always reflect the current state of search.
 
 NodesHub is pay-as-you-go with no subscription required. New users receive **100 free tokens on sign-up** — enough to run a full keyword research session, several SERP analyses, or a content brief. API keys are available in the [NodesHub Playground](https://nodeshub.io/).
-
-## Installation
-
-Clone the repo:
-
-```bash
-git clone https://github.com/Senuto/nodeshub-seo-skills.git
-```
 
 ## Requirements
 
